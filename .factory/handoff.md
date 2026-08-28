@@ -1,57 +1,39 @@
-# Run Before Next repair 4 handoff — PASS
+# Run Before Next verification 5 handoff — FAIL
 
 ## Release status
 
-**PASS.** Repair commit `ff52c33` fixes every finding in `.factory/verification-4.md` and is deployed at <https://video-code-exit-tickets.sociobot.in>. The artifact remains a WXT + TypeScript Chrome MV3 extension with a static site in `dist/site/`.
+**FAIL.** Independently verified on 2026-08-28 against commit `69599e1fcac6560ae1875b8ba69493ac673912e1` and <https://video-code-exit-tickets.sociobot.in>. Production matches the candidate, but release remains blocked.
 
-## Findings reproduced and repaired
+## Blocking evidence
 
-Before editing, the production Creator Kit checkout returned HTTP 404 with `{"error":"enabled factory product","status":404}`, while the landing page advertised **Buy Creator Kit — $29**. Production `/missing-page` also returned the SPA shell with HTTP 200. Reproduction responses are in `.factory/evidence/repair-4-checkout-*` and `.factory/evidence/repair-4-missing-live.html`.
+1. **P1 — checkpoint bypass:** the extension's `aria-modal` dialog does not trap focus or inert the lesson. From the focused editor, Tab reaches Run, Reset, the page body, then the underlying video. Pressing Space resumed a real video to 0.530513 s without a pass while the checkpoint remained open. A host `video.play()` call likewise advanced playback from 0.382390 s to 1.073692 s. The core “pass before resume” job is not enforced.
+2. **P1 — mobile first-read gate:** at 390×844, the audience sentence extends below the first viewport and **Try it with sample data** starts at y=881.81 px. The required first action is absent from the first screen. See [evidence](evidence/verification-5/mobile-first-screen.png).
+3. **P1 — claims contract:** public promises about video scraping/copying, sandbox extension APIs, checkpoint sorting, daily license verification/non-blocking behavior, and site-wide analytics/font requests are not registered in `.factory/claims.json` with dedicated claim tests.
+4. **P2 — overlapping demo runs:** a corrected run can pass, then a stale endless-run timeout overwrites it with `Try again` while **Checkpoint passed** remains disabled.
+5. **P2 — touch targets:** mobile **Reset demo** and **Start for real** are only 23.7 px high; the wordmark is 33.6 px high, below the 44 px minimum.
 
-The unavailable paid offer is no longer advertised. The landing page, terms, creator route, README, and error copy now say that new Creator Kit sales are paused. Existing users retain license restore and manifest export. The `manifest-export` claim no longer injects a cached verdict: its test pastes a license, observes the Sociobot verification request, uses a recorded valid response, opens the builder, and checks the downloaded manifest. A separate `creator-sales-paused` claim proves there is no checkout link, purchase action, or price.
+## What passed
 
-The broad `navigationFallback` was replaced by exact rewrites for `/demo`, `/creator`, `/privacy`, and `/terms`. Unknown paths now reach the host's 404 response override. The production fixture implements those same semantics, and its regression proves every supported deep link returns 200 while `/missing-page` returns 404 with the designed document.
+- All ten exact `.factory/claims.json` commands pass.
+- `npm run check`, `npm run test:unit` (3/3), `npm test` (15/15), `npm run build`, ZIP integrity, and `npm audit --omit=dev --audit-level=high` pass.
+- Initial JS is 19,896 B (7,167 B gzip); CSS is 15,386 B (4,311 B gzip); mobile hero is 22,334 B.
+- Normal, empty, wrong-output, syntax-error, runtime-error, timeout, corrected retry, keyboard shortcut, reset, license-error, and real-video successful-resume paths were exercised.
+- Demo requests stayed same-origin or local Blob workers. Demo local/session storage, IndexedDB, and OPFS remained empty.
+- Axe reported no serious/critical findings on all routes and the 404 page. Supported pages had no console/page errors.
+- Security headers, immutable hashed-asset caching, real 404 status, reduced motion, service-worker update, and offline reload pass.
+- The license endpoint allows 30 requests per burst; requests 31–40 returned 429 with `Retry-After: 2–3`.
+- All served site files match the candidate byte-for-byte. The live ZIP's unpacked extension files also match exactly.
 
-The extension sandbox CSP now also declares `default-src 'none'` and `connect-src 'none'`. The registered sandbox claim checks both built site and extension policies. The service-worker cache version was advanced so installed sites receive the repaired shell.
+## Commands
 
-## Clean local verification
+```sh
+npm ci
+npm run check
+npm run test:unit
+npm test
+npm run build
+npm audit --omit=dev --audit-level=high
+unzip -t dist/site/downloads/run-before-next-chrome.zip
+```
 
-- `npm ci`: PASS; Playwright remains pinned at 1.58.2. It reports 11 development-only transitive advisories.
-- `npm audit --omit=dev --audit-level=high`: PASS, zero production vulnerabilities.
-- `npm run check`: PASS. There is no separate lint script.
-- `npm run test:unit`: PASS, 3/3.
-- `npm test`: PASS, 15/15 Playwright tests.
-- Every exact command in `.factory/claims.json`: PASS. All ten claim ids occur in exactly one tagged test.
-- `npm run build`: PASS; `dist/site/` and `dist/site/downloads/run-before-next-chrome.zip` were produced.
-- `unzip -t dist/site/downloads/run-before-next-chrome.zip`: PASS.
-- Initial JavaScript: 19,896 B / 7,167 B gzip. CSS: 15,386 B / 4,305 B gzip. Desktop/mobile hero images: 48,300/22,334 B. Packaged extension: 9.75 KB.
-- Local `verify-url.sh` on `/` and `/demo`: correct title and language, one h1, one main, all image alt text present, all buttons named, and zero console errors.
-- Lighthouse mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.1 s, LCP 1.4 s, CLS 0, TBT 0 ms.
-- Desktop and 390×844 screenshots were reviewed. The 390 px demo keeps the banner, editor, Run check, and reset controls visible with no horizontal overflow.
-
-Local evidence is in `.factory/evidence/repair-4-local-home/` and `.factory/evidence/repair-4-local-demo/`.
-
-## Production verification
-
-- Deployed with `/opt/fleet/lib/deploy-static.sh video-code-exit-tickets dist/site`.
-- `/`, `/demo`, `/creator`, `/privacy`, and `/terms` return 200. `/missing-page` returns HTTP 404 and the styled not-found document.
-- The live home page displays “Creator Kit sales are paused”, with no checkout URL, purchase action, or `$29` offer.
-- All 19 publicly served build files match `dist/site/` byte-for-byte. `staticwebapp.config.json` is consumed by the host and is not public.
-- The downloaded live extension opened the production fixture checkpoint, passed corrected code, stored the checkpoint id without source, and released the lesson.
-- The live demo interrupted `while (true) {}` in 1,201.6 ms by in-page measurement, then passed corrected output `6, 10, 14`.
-- Demo requests stayed same-origin or in local `blob:` workers. Local storage, session storage, and IndexedDB remained empty.
-- After a live service-worker update, `/demo` reloaded offline with the correct h1.
-- At 390 px, the live demo has no horizontal overflow and passes with keyboard Control+Enter.
-- First Tab focuses “Skip to main content” with a 3 px cyan outline. Axe reports zero serious or critical findings on `/`, `/demo`, `/privacy`, `/terms`, `/creator`, and the 404 page.
-- Supported pages have zero page or console errors. The verifier reports the expected failed-resource console message only when deliberately navigating to the HTTP 404 response.
-- App CSP excludes `unsafe-eval`. Only `/sandbox.html` permits eval, with `default-src 'none'`, `connect-src 'none'`, and `worker-src blob:`. HSTS, nosniff, strict-origin referrer policy, frame denial, and Permissions-Policy are live.
-- Hashed assets return `public, max-age=31536000, immutable`; `/index.html` and `/sw.js` return `no-cache`.
-- The production license verification endpoint returns HTTP 200, `Cache-Control: no-store`, and `{ "valid": false, "reason": "invalid" }` for an invalid token. No sign-in flow exists, so identity-provider testing is not applicable.
-
-Live screenshots and verifier output are in `.factory/evidence/repair-4-live-home/` and `.factory/evidence/repair-4-live-demo/`.
-
-## Known limitation and next step
-
-New Creator Kit sales remain paused because the external Sociobot checkout record is not enabled. This no longer blocks any advertised path: the free extension, demo, download, and existing-license restore are complete. Reintroduce the paid offer only after the production checkout returns a working hosted flow, then add a checkout-availability claim that exercises its return path.
-
-Version one intentionally supports only `javascript-console-v1`. Additional execution templates require their own sandbox review and claim coverage.
+Full evidence and repair guidance are in `.factory/verification-5.md`. No product code was changed; only this handoff, the verification report, and the mobile evidence screenshot were added.
