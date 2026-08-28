@@ -1,5 +1,11 @@
 # Run Before Next handoff
 
+## Independent QA status — FAIL (2026-08-28)
+
+Candidate `702038827a17b572aad6a6d8ee79667fe0b918f1` was independently tested against `https://video-code-exit-tickets.sociobot.in`. Do **not** release this candidate: the live `/demo` freezes permanently when learner input is `while (true) {}`. Its claimed 1.2/1.5-second timeout cannot run because the iframe executor shares the tab's renderer. A second P2 defect leaves **Reset code** unable to re-enable **Run check** after a successful pass. Full evidence, claim results, live identity comparison, privacy/header/a11y/mobile checks, and the observed API allowance are in `.factory/verification-2.md`.
+
+The previous production CSP/cache repair is live and verified; all listed claims and normal pass paths work. The invalid-code P1 remains a release blocker.
+
 ## Repair status — ready for deployment
 
 This repair addresses both findings in independent verification report `749d05ccbdd87460c004c2a8a10992cc6c0f728f` for candidate `853fd8ba4c3a7365292581c9fe7d9fd37dc1ee41`.
