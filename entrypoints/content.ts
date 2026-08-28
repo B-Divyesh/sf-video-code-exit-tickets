@@ -52,6 +52,7 @@ class CheckpointController {
   private sandbox?: HTMLIFrameElement;
   private sandboxReady = false;
   private runId = '';
+  private runTimeout?: number;
   private storageKey: string;
 
   constructor(private manifest: LessonManifest) {
@@ -143,11 +144,12 @@ class CheckpointController {
     }
     result.className = 'result running';
     result.textContent = 'Running in the JavaScript sandbox…';
-    this.runId = crypto.randomUUID();
-    const send = () => this.sandbox!.contentWindow?.postMessage({ type: 'RBN_RUN', id: this.runId, code }, '*');
+    window.clearTimeout(this.runTimeout);
+    const id = this.runId = crypto.randomUUID();
+    const send = () => this.sandbox!.contentWindow?.postMessage({ type: 'RBN_RUN', id, code }, '*');
     if (this.sandboxReady) send(); else window.setTimeout(send, 120);
-    window.setTimeout(() => {
-      if (result.classList.contains('running')) {
+    this.runTimeout = window.setTimeout(() => {
+      if (id === this.runId && result.classList.contains('running')) {
         result.className = 'result fail';
         result.textContent = 'The code ran for too long. Check for an endless loop.';
         this.sandboxReady = false;
@@ -157,6 +159,7 @@ class CheckpointController {
   }
 
   private async handleResult(output: string, error?: string) {
+    window.clearTimeout(this.runTimeout);
     const result = this.shadow!.querySelector<HTMLDivElement>('#rbn-result')!;
     if (error) {
       result.className = 'result fail';

@@ -16,11 +16,39 @@ test('@claim:demo-pass runs changed code and passes the sample checkpoint', asyn
   await expect(page.locator('#demo-state')).toHaveText('Passed');
 });
 
+test('@claim:timeout-recovery interrupts an endless demo run and lets the learner retry', async ({ page }) => {
+  await page.goto('/demo');
+  const editor = page.getByLabel('JavaScript');
+  await editor.fill('while (true) {}');
+  await page.getByRole('button', { name: /Run check/ }).click();
+  await expect(page.locator('#demo-output')).toContainText('The code ran for too long. Check for an endless loop.', { timeout: 2500 });
+  await expect(page.getByRole('button', { name: /Run check/ })).toBeEnabled();
+  await editor.fill("const prices = [3, 5, 7];\nconst doubled = prices.map(price => price * 2);\nconsole.log(doubled.join(', '));");
+  await page.getByRole('button', { name: /Run check/ }).click();
+  await expect(page.getByText('OUTPUT · PASSED')).toBeVisible();
+  await expect(page.locator('#demo-output p')).toHaveText('6, 10, 14');
+});
+
+test('Reset code re-enables Run check after a passed demo checkpoint', async ({ page }) => {
+  await page.goto('/demo');
+  const editor = page.getByLabel('JavaScript');
+  await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
+  const runButton = page.getByRole('button', { name: /Run check/ });
+  await runButton.click();
+  await expect(page.getByText('OUTPUT · PASSED')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Checkpoint passed' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Reset code' }).click();
+  await expect(runButton).toBeEnabled();
+  await expect(runButton).toHaveText(/Run check/);
+  await expect(page.locator('#demo-state')).toHaveText('Not passed');
+});
+
 test('production CSP keeps eval out of the app and confines it to the sandbox', async ({ page }) => {
   const [app, sandbox] = await Promise.all([page.request.get('/demo'), page.request.get('/sandbox.html')]);
   expect(app.headers()['content-security-policy']).toContain("script-src 'self'");
   expect(app.headers()['content-security-policy']).not.toContain("'unsafe-eval'");
   expect(sandbox.headers()['content-security-policy']).toContain("script-src 'self' 'unsafe-eval'");
+  expect(sandbox.headers()['content-security-policy']).toContain("worker-src blob:");
   expect(sandbox.headers()['content-security-policy']).toContain("connect-src 'none'");
   await page.goto('/demo');
   await page.getByLabel('JavaScript').fill('console.log("sandbox works")');
@@ -46,7 +74,12 @@ test('@claim:privacy-demo keeps sample data out of storage and third-party reque
   await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
   await page.getByRole('button', { name: /Run check/ }).click();
   await expect(page.getByText('OUTPUT · PASSED')).toBeVisible();
-  expect(outgoing.every(url => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
+  expect(outgoing.every(url => {
+    const request = new URL(url);
+    // The killable executor is a local Blob worker. It has no network origin
+    // and is not a request that can leave the device.
+    return request.protocol === 'blob:' || request.origin === 'http://127.0.0.1:4173';
+  })).toBe(true);
   const storage = await page.evaluate(() => ({ local: Object.keys(localStorage), session: Object.keys(sessionStorage) }));
   expect(storage).toEqual({ local: [], session: [] });
 });
@@ -152,7 +185,11 @@ test('@claim:extension-flow @claim:source-not-saved extension opens the checkpoi
     });
     await expect(host).toBeAttached();
     const editor = host.locator('textarea');
-    await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
+    const starter = await editor.inputValue();
+    await editor.fill('while (true) {}');
+    await host.getByRole('button', { name: /Run check/ }).click();
+    await expect(host.getByText('The code ran for too long. Check for an endless loop.')).toBeVisible({ timeout: 2500 });
+    await editor.fill(starter.replace('* 1', '* 2'));
     await host.getByRole('button', { name: /Run check/ }).click();
     await expect(host.getByText(/Passed\. Output: 6, 10, 14/)).toBeVisible();
     const stored = await serviceWorker.evaluate(() => chrome.storage.local.get(null));

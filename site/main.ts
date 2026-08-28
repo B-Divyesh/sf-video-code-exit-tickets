@@ -37,7 +37,7 @@ function route(): Route {
 function render(focus = false) {
   const current = route();
   const page = current === 'home' ? homePage() : current === 'demo' ? demoPage() : current === 'creator' ? creatorPage() : current === 'privacy' ? privacyPage() : current === 'terms' ? termsPage() : notFoundPage();
-  app.innerHTML = `${current === 'demo' ? demoBanner() : ''}${header()}<main id="main" tabindex="-1">${page}</main>${footer()}`;
+  app.innerHTML = `${header(current === 'demo' ? demoBanner() : '')}<main id="main" tabindex="-1">${page}</main>${footer()}`;
   setMetadata(current);
   bindCommon();
   if (current === 'demo') bindDemo();
@@ -51,8 +51,8 @@ function render(focus = false) {
   }
 }
 
-function header() {
-  return `<header class="site-header"><a class="wordmark" href="/" data-route aria-label="Run Before Next home"><span class="wordmark-mark" aria-hidden="true"><i></i></span><span>Run Before Next</span></a><nav aria-label="Main navigation"><a href="/demo" data-route>Demo</a><a href="/#authors">For authors</a><a href="/privacy" data-route>Privacy</a></nav><a class="header-download" href="/downloads/run-before-next-chrome.zip" download>Download extension</a></header>`;
+function header(banner = '') {
+  return `<header>${banner}<div class="site-header"><a class="wordmark" href="/" data-route aria-label="Run Before Next home"><span class="wordmark-mark" aria-hidden="true"><i></i></span><span>Run Before Next</span></a><nav aria-label="Main navigation"><a href="/demo" data-route>Demo</a><a href="/#authors">For authors</a><a href="/privacy" data-route>Privacy</a></nav><a class="header-download" href="/downloads/run-before-next-chrome.zip" download>Download extension</a></div></header>`;
 }
 
 function footer() {
@@ -79,7 +79,7 @@ function demoBanner() {
 
 function demoPage() {
   const checkpoint = SAMPLE_MANIFEST.checkpoints[0];
-  return `<section class="demo-page"><div class="demo-heading"><p class="eyebrow">SAMPLE LESSON · CHECKPOINT 1 OF 1</p><h1>Change the code before moving on</h1><p>Set the multiplier to 2. Then run the check.</p></div><div class="lesson-instrument"><section class="mock-video" aria-label="Paused sample video"><div class="video-grid" aria-hidden="true"><span>[ 3, 5, 7 ]</span><b>map( )</b><i>?</i></div><div class="video-controls"><button aria-label="Play sample video" id="fake-play">▶</button><div class="timeline"><span></span></div><time>0:47 / 2:18</time></div><p class="paused-label"><span></span> Paused for checkpoint</p></section><section class="ticket" aria-labelledby="ticket-title"><div class="ticket-head"><p class="eyebrow">RUN TICKET · 00:47</p><span id="demo-state">Not passed</span></div><h2 id="ticket-title">Double each price</h2><p>${checkpoint.prompt}</p><label for="demo-code">JavaScript</label><textarea id="demo-code" spellcheck="false">${escapeHtml(demoCode)}</textarea><div class="editor-actions"><button class="button primary" id="run-demo" type="button">Run check <kbd>Ctrl ↵</kbd></button><button class="button ghost" id="reset-code" type="button">Reset code</button></div><div class="output" id="demo-output" role="status" aria-live="polite"><span>OUTPUT</span><p>Run the changed code to see its output.</p></div></section></div><aside class="demo-note"><span aria-hidden="true">↳</span><p>This sample uses the same manifest and isolated runner as the extension. Change <code>* 1</code> to <code>* 2</code>.</p></aside></section>`;
+  return `<section class="demo-page"><div class="demo-heading"><p class="eyebrow">SAMPLE LESSON · CHECKPOINT 1 OF 1</p><h1>Change the code before moving on</h1><p>Set the multiplier to 2. Then run the check.</p></div><div class="lesson-instrument"><section class="mock-video" aria-label="Paused sample video"><div class="video-grid" aria-hidden="true"><span>[ 3, 5, 7 ]</span><b>map( )</b><i>?</i></div><div class="video-controls"><button aria-label="Play sample video" id="fake-play">▶</button><div class="timeline"><span></span></div><time>0:47 / 2:18</time></div><p class="paused-label"><span></span> Paused for checkpoint</p></section><section class="ticket" aria-labelledby="ticket-title"><div class="ticket-head"><p class="eyebrow">RUN TICKET · 00:47</p><span id="demo-state">Not passed</span></div><h2 id="ticket-title">Double each price</h2><p>${checkpoint.prompt}</p><label for="demo-code">JavaScript</label><textarea id="demo-code" spellcheck="false">${escapeHtml(demoCode)}</textarea><div class="editor-actions"><button class="button primary" id="run-demo" type="button">Run check <kbd>Ctrl ↵</kbd></button><button class="button ghost" id="reset-code" type="button">Reset code</button></div><div class="output" id="demo-output" role="status" aria-live="polite"><span>OUTPUT</span><p>Run the changed code to see its output.</p></div></section></div><div class="demo-note"><span aria-hidden="true">↳</span><p>This sample uses the same manifest and isolated runner as the extension. Change <code>* 1</code> to <code>* 2</code>.</p></div></section>`;
 }
 
 function creatorPage() {
@@ -121,7 +121,18 @@ function bindDemo() {
   };
   const showDemoError = (message: string) => { demoPassed = false; state.textContent = 'Try again'; state.className = 'failed'; output.className = 'output fail'; output.innerHTML = `<span>OUTPUT · NOT YET</span><p>${escapeHtml(message)}</p>`; };
   document.querySelector('#run-demo')!.addEventListener('click', run);
-  document.querySelector('#reset-code')!.addEventListener('click', () => { textarea.value = SAMPLE_MANIFEST.checkpoints[0].starterCode; demoCode = textarea.value; demoPassed = false; state.textContent = 'Not passed'; state.className = ''; output.className = 'output'; output.innerHTML = '<span>OUTPUT</span><p>Run the changed code to see its output.</p>'; });
+  document.querySelector('#reset-code')!.addEventListener('click', () => {
+    textarea.value = SAMPLE_MANIFEST.checkpoints[0].starterCode;
+    demoCode = textarea.value;
+    demoPassed = false;
+    state.textContent = 'Not passed';
+    state.className = '';
+    output.className = 'output';
+    output.innerHTML = '<span>OUTPUT</span><p>Run the changed code to see its output.</p>';
+    const button = document.querySelector<HTMLButtonElement>('#run-demo')!;
+    button.disabled = false;
+    button.innerHTML = 'Run check <kbd>Ctrl ↵</kbd>';
+  });
   textarea.addEventListener('keydown', (event) => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); void run(); } });
   if (demoPassed) { state.textContent = 'Passed'; state.className = 'passed'; }
   document.querySelector('#fake-play')!.addEventListener('click', () => { output.className = 'output fail'; output.innerHTML = '<span>VIDEO PAUSED</span><p>Pass the checkpoint before the lesson continues.</p>'; });

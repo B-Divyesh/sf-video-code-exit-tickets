@@ -1,69 +1,59 @@
-# Run Before Next handoff
+# Run Before Next repair handoff
 
-## Independent QA status — FAIL (2026-08-28)
+## Release status
 
-Candidate `702038827a17b572aad6a6d8ee79667fe0b918f1` was independently tested against `https://video-code-exit-tickets.sociobot.in`. Do **not** release this candidate: the live `/demo` freezes permanently when learner input is `while (true) {}`. Its claimed 1.2/1.5-second timeout cannot run because the iframe executor shares the tab's renderer. A second P2 defect leaves **Reset code** unable to re-enable **Run check** after a successful pass. Full evidence, claim results, live identity comparison, privacy/header/a11y/mobile checks, and the observed API allowance are in `.factory/verification-2.md`.
+This repair commit fixes every release blocker in independent report `424fc6fed4e44efca5a97f351e439b1a0139f457` (candidate `702038827a17b572aad6a6d8ee79667fe0b918f1`). It was deployed to production at <https://video-code-exit-tickets.sociobot.in> on 2026-08-28.
 
-The previous production CSP/cache repair is live and verified; all listed claims and normal pass paths work. The invalid-code P1 remains a release blocker.
+## What changed
 
-## Repair status — ready for deployment
+- Learner JavaScript now runs in a dedicated Blob worker created by the already-isolated sandbox iframe. The page and extension never execute learner code on their UI thread. On timeout the parent removes/reloads that iframe, which terminates the worker and leaves the editor usable.
+- The static sandbox CSP narrowly permits `worker-src blob:` alongside its existing isolated `unsafe-eval` policy. The normal app CSP still excludes `unsafe-eval`; the sandbox has `default-src 'none'` and `connect-src 'none'`.
+- The unpacked MV3 extension uses the same worker boundary and its run timer now tracks the active run, so a stale timeout cannot interrupt a later retry.
+- **Reset code** now restores the Run check label and enabled state after a passed demo checkpoint.
+- The demo banner is inside the header landmark and the explanatory note is ordinary section content, resolving the standalone Axe landmark findings.
 
-This repair addresses both findings in independent verification report `749d05ccbdd87460c004c2a8a10992cc6c0f728f` for candidate `853fd8ba4c3a7365292581c9fe7d9fd37dc1ee41`.
+## Regression coverage
 
-- The `/demo` runner no longer evaluates learner code in the main site context. `shared/runner.ts` now creates a hidden, opaque-origin `<iframe sandbox="allow-scripts">` at `/sandbox.html`, matching the isolation model already used by the extension. The main CSP remains `script-src 'self'` with no `unsafe-eval`. Only `/sandbox.html` receives a tightly scoped CSP permitting `unsafe-eval`; it has no network, images, styles, forms, objects, or inherited site origin. The changed `* 2` sample produces `6, 10, 14` under these production headers.
-- `staticwebapp.config.json` now serves `/assets/*` with `Cache-Control: public, max-age=31536000, immutable`. `index.html` and `sw.js` are `no-cache`, so deployments and service-worker updates are discovered promptly.
-- `tests/production-server.mjs` serves the built static artifact using the committed Static Web Apps CSP/cache configuration. Playwright now proves that `demo-pass` works with the main CSP, that the sandbox is the only eval-enabled document, and that cache headers have the intended values. This closes the deployment-only test gap.
+- `@claim:timeout-recovery` runs `while (true) {}`, asserts the exact timeout text within 2.5 seconds, then runs corrected code and asserts `6, 10, 14` passes.
+- The consumer/unpacked-extension flow performs the same infinite-loop timeout and successful retry before checking stored progress.
+- A demo regression passes, presses Reset code, and asserts Run check is enabled, relabelled, and the ticket is Not passed.
+- Production-fixture coverage asserts the main policy has no `unsafe-eval`, while only `/sandbox.html` has isolated eval plus `worker-src blob:` and no network connection policy.
 
-Deployed to `https://video-code-exit-tickets.sociobot.in` from repair commit `3bbede8` on 2026-08-28 with the Static Web Apps production deployment token for `sf-video-code-exit-tickets`. Live checks passed: `/demo` changed-code keyboard run returned `6, 10, 14` with no page or console errors; the 390px view had no horizontal overflow; the live URL verifier found one `h1`, `lang=en`, a main landmark, and no missing alt text or unlabeled buttons. Live headers confirm the main page excludes `unsafe-eval`, `/sandbox.html` has the isolated no-network eval policy, `/assets/index-C7-dK_vi.js` is immutable for one year, and `/sw.js` is `no-cache`.
+## Verification evidence
 
-## What was built
+Clean-install validation on 2026-08-28:
 
-- A WXT and TypeScript Chrome MV3 extension.
-- Author manifests embedded as `application/json` on lesson pages.
-- Validation for unique ids, timestamps, required fields, and the `javascript-console-v1` allowlist.
-- Page video monitoring that pauses at each incomplete checkpoint.
-- A keyboard-ready checkpoint panel with reset, exact-output feedback, timeout errors, pass state, and lesson resume.
-- A declared MV3 sandbox page. Learner code has no extension API access.
-- Local progress that stores page addresses and passed checkpoint ids, never learner source.
-- A popup with lesson status, an empty state, and a manual **Open next checkpoint** action.
-- A static landing site with `/demo`, `/creator`, `/privacy`, `/terms`, and styled 404 handling.
-- A one-click sample lesson with in-memory data, reset controls, keyboard execution, error feedback, and offline reload.
-- A $29 one-time Creator Kit. The site accepts return licenses, verifies through the Sociobot billing API, caches results for one day, restores pasted licenses, and gates the manifest builder.
-- An original luminous glass landscape, responsive WebP derivatives, Open Graph art, favicon, and apple-touch icon.
-- Service-worker caching, security headers, metadata, sitemap, robots file, and a packaged extension download.
+- `npm ci`: passed.
+- `npm run test:unit`: 3/3 passed.
+- `npm test`: 13/13 Playwright tests passed. This covers desktop, 390px mobile, keyboard Control/Command+Enter, timeout/retry, reset recovery, routes/history, production CSP/cache policy, privacy, offline reload/service-worker update, accessibility, extension download, and unpacked-extension consumer flow.
+- Every command in `.factory/claims.json` was run from the clean install, including new `npm test -- --grep @claim:timeout-recovery`; all passed. The allowlist claim passed with `npm run test:unit -- --testNamePattern @claim:template-allowlist`.
+- `npm run check`: passed.
+- `npm run build`: passed and wrote `dist/site/` and `dist/site/downloads/run-before-next-chrome.zip`.
+- `npm audit --omit=dev --audit-level=high`: 0 production vulnerabilities.
+- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo .factory/evidence/repair-2`: passed; title, `lang=en`, one h1, main landmark, alt text, labelled buttons, and console were clean. Standalone `@axe-core/cli` against that production fixture: 0 violations.
+- Lighthouse local production fixture: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.1 s, LCP 1.5 s, CLS 0, TBT 0 ms. Evidence: `.factory/evidence/repair-2/lighthouse.json`.
 
-Runtime AI was not added. The product has a deterministic verification job and does not benefit from sending learner code to a model.
+Live post-deploy checks:
 
-## Run and verify
+- Public `/demo` ran `while (true) {}`, showed the timeout, then passed corrected code. Reset code re-enabled Run check. At 390px there was no horizontal overflow and no page errors.
+- `/opt/fleet/lib/verify-url.sh https://video-code-exit-tickets.sociobot.in/demo .factory/evidence/live-repair-2`: passed (one h1, main, `lang=en`, no missing alt text/unlabelled buttons, no console errors).
+- The public `index.html` and hashed app JS have the same SHA-256 as `dist/site`; the downloaded production ZIP has the same unpacked files as `dist/site/downloads/run-before-next-chrome.zip`.
+- Live main policy retains `script-src 'self'` without `unsafe-eval`; live sandbox policy is `default-src 'none'`, permits only its own script eval and Blob worker, and denies network. The hashed app JS has `Cache-Control: public, max-age=31536000, immutable`.
+
+Local evidence is retained under `.factory/evidence/repair-2/`; live evidence is under `.factory/evidence/live-repair-2/`.
+
+## Run and deploy
 
 ```bash
-npm install
-npm run check
+npm ci
 npm run test:unit
 npm test
+npm run check
 npm run build
 ```
 
-`npm run build` is the deployment build. It writes the static root to `dist/site/`, including `index.html` and `downloads/run-before-next-chrome.zip`. The unpacked extension is in `.output/chrome-mv3/`.
+Deploy `dist/site/` as the static root. This repair was deployed with Azure Static Web Apps CLI to production app `sf-video-code-exit-tickets` in resource group `sociobot`.
 
-Repair verification completed locally on 2026-08-28:
+## Known gaps
 
-- `npm ci`: passed from a clean dependency install.
-- `npm run check`: passed.
-- `npm run test:unit`: 3 passed.
-- `npm test`: 11 Playwright tests passed. This includes every `.factory/claims.json` command, unpacked-extension consumer flow, desktop and 390px mobile, keyboard execution, privacy request/storage capture, offline reload, service-worker `registration.update()`, route/history/link checks, and Axe serious/critical checks.
-- `npm run build`: passed; writes `dist/site/` and `dist/site/downloads/run-before-next-chrome.zip`.
-- `npm audit --omit=dev --audit-level=high`: 0 production vulnerabilities.
-- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo .factory/evidence/repair`: passed with no console errors, title `Demo — Run Before Next`, `lang=en`, one `h1`, a main landmark, and no missing image alt text or unlabeled buttons. Evidence: `.factory/evidence/repair/verify.json`.
-- Built site assets: initial JavaScript 7.27 KB gzip; CSS 4.31 KB gzip; hero WebP 48 KB desktop and 22 KB mobile. The extension remains 19 KB unpacked and 9.37 KB packaged.
-
-Claim definitions and exact isolated commands are in `.factory/claims.json`. Demo isolation is in `.factory/demo.md`. Landing copy and terminology are audited in `.factory/copy-audit.md`.
-
-## Known gaps and next steps
-
-- Version one runs short JavaScript console exercises only. Python and full-stack templates need separate reviewed sandboxes.
-- The extension targets the first video element on a page. A later manifest version can add an explicit video selector.
-- Chrome MV3 is packaged and tested. Firefox packaging is not included.
-- The factory must register the `video-code-exit-tickets` billing product and confirm its production return URL before sales open.
-- Classroom analytics are not in version one. The paid Creator Kit is local and does not collect learner activity.
-- No repair-specific gaps remain. Future template expansion still needs separately reviewed sandbox policies.
+No release-blocking gaps remain. Version one intentionally supports only the reviewed `javascript-console-v1` template; any new template needs its own sandbox review.

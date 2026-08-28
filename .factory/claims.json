@@ -14,6 +14,13 @@
     "sandbox": "fresh browser context; record requests and inspect local and session storage after passing"
   },
   {
+    "id": "timeout-recovery",
+    "claim": "Stops an endless demo program and lets the learner run corrected code.",
+    "where": "demo checkpoint and README",
+    "test": "npm test -- --grep @claim:timeout-recovery",
+    "sandbox": "fresh browser context at /demo; run while (true) {}, then run the bundled corrected arrays program"
+  },
+  {
     "id": "extension-download",
     "claim": "Downloads the packaged Chrome extension.",
     "where": "site header and README",

@@ -13,9 +13,14 @@ export function runJavaScript(code: string, timeoutMs = 1200): Promise<RunResult
     iframe.title = 'JavaScript sandbox';
     iframe.setAttribute('aria-hidden', 'true');
 
+    let settled = false;
     const finish = (result: RunResult) => {
+      if (settled) return;
+      settled = true;
       window.clearTimeout(timeout);
       window.removeEventListener('message', receive);
+      // Removing the sandbox also terminates its dedicated execution worker.
+      // A learner loop can therefore never occupy the page's event loop.
       iframe.remove();
       resolve(result);
     };
