@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://video-code-exit-tickets.sociobot.in/sitemap.xml
