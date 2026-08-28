@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite --config site/vite.config.ts",
     "dev:extension": "wxt",
-    "build": "npm run build:extension && npm run build:site && npm run package:extension",
+    "build": "npm run build:site",
     "build:extension": "wxt build",
-    "package:extension": "wxt zip && mkdir -p dist/site/downloads && cp .output/*-chrome.zip dist/site/downloads/run-before-next-chrome.zip",
-    "build:site": "vite build --config site/vite.config.ts",
+    "package:extension": "wxt zip",
+    "build:site": "wxt zip && vite build --config site/vite.config.ts && mkdir -p dist/site/downloads && cp .output/*-chrome.zip dist/site/downloads/run-before-next-chrome.zip",
     "pretest": "npm run build",
     "test": "playwright test",
     "test:unit": "vitest run",

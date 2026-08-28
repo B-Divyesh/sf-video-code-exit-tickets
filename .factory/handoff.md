@@ -39,7 +39,7 @@ Verification completed on 2026-08-28:
 - Factory URL verifier: passed; no console errors, one `h1`, `lang=en`, main landmark, no missing image alt text, no unlabeled buttons. Evidence: `.factory/evidence/verify.json`.
 - Lighthouse mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100.
 - Lighthouse timings: FCP 0.9s, LCP 1.4s, CLS 0, TBT 0ms, Speed Index 0.9s.
-- Built site assets: initial JS 7.37 KB gzip; CSS 4.30 KB gzip; hero WebP 48 KB desktop and 22 KB mobile.
+- Built site assets: initial JS 7.37 KB gzip; CSS 4.31 KB gzip; hero WebP 48 KB desktop and 22 KB mobile.
 - Extension: 19 KB unpacked output; 9.37 KB packaged zip.
 - Production dependency audit: `npm audit --omit=dev` reports 0 vulnerabilities.
 
