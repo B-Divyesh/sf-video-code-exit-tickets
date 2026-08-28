@@ -37,7 +37,10 @@ The core regression uses a real playable canvas `MediaStream` attached to the fi
 
 Artifact class remains **Chrome MV3 browser extension plus static site**. Build and deploy the static root `dist/site/`; the packaged extension is available at `dist/site/downloads/run-before-next-chrome.zip`. The configured production identity is `https://video-code-exit-tickets.sociobot.in`.
 
+Repair commit `bb23893` was pushed to `main`. This checkout has no Static Web Apps deployment token or checked-in deployment configuration, and the public host still returned the previous `assets/index-BC6ccfrd.js` fingerprint after the push. The factory's configured static deployment must publish the pushed commit; no infrastructure credentials were changed or guessed.
+
 ## Known notes
 
 - `npm ci` reports 11 advisories in development tooling (2 moderate, 5 high, 4 critical). The production-only audit is clean; no dependency update was made during this scoped repair.
 - No separate lint command exists; strict TypeScript checking is the repository's type/lint gate.
+- Production propagation remains pending the factory deployment trigger described above.
