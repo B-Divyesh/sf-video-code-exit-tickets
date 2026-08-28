@@ -1,0 +1,12 @@
+{
+  "slug": "video-code-exit-tickets",
+  "title": "Run Before Next",
+  "summary": "Prove your code change before the video continues.",
+  "territory": "utilities",
+  "user": "People learning programming from video lessons who need to prove they can alter and run the idea before continuing.",
+  "smallest_useful_product": "A browser extension and tiny author manifest that pauses selected video timestamps, opens a prebuilt sandbox, and requires one test or output change before resume.",
+  "artifact_class": "browser-extension",
+  "monetization": "freemium",
+  "constraints": "Only run allowlisted sandbox templates; do not scrape or redistribute video; obey host CSP and avoid storing learner source code by default.",
+  "state": "RESEARCHED"
+}
