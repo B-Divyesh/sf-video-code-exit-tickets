@@ -1,5 +1,13 @@
 # Run Before Next handoff
 
+## Independent verification status — FAIL
+
+Verification on 2026-08-28 of candidate `853fd8ba4c3a7365292581c9fe7d9fd37dc1ee41` at `https://video-code-exit-tickets.sociobot.in` found a release-blocking deployment-only defect. The local candidate passes `npm run check`, all 3 unit tests, all 9 Playwright tests, every exact `.factory/claims.json` command, and repeated production builds. The live page and unpacked extension contents match that candidate.
+
+However, the required live sample path fails: at `/demo`, changing `* 1` to `* 2` and choosing **Run check** returns “Evaluating a string as JavaScript violates … `script-src 'self'`” instead of passing `6, 10, 14`. The deployed CSP forbids the runner's `new Function` evaluation. This makes the one-click demo and live `demo-pass` claim false. Do not release this candidate.
+
+Also fix the deployed cache policy: all assets, including content-hashed JS/CSS, currently have `Cache-Control: public, must-revalidate, max-age=30`, not immutable long-lived caching. Full evidence, exact commands, accessibility/mobile/privacy/PWA results, headers, rate-limit evidence (30 rapid invalid verification requests allowed; request 31 is 429 with Retry-After), and repair guidance are in `.factory/verification.md`.
+
 ## What was built
 
 - A WXT and TypeScript Chrome MV3 extension.
