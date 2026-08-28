@@ -9,6 +9,7 @@ const LICENSE_CACHE_KEY = `sb_license_cache:${SLUG}`;
 const app = document.querySelector<HTMLDivElement>('#app')!;
 let demoCode = SAMPLE_MANIFEST.checkpoints[0].starterCode;
 let demoPassed = false;
+let demoRunId = 0;
 
 type Route = 'home' | 'demo' | 'creator' | 'privacy' | 'terms' | 'not-found';
 
@@ -92,7 +93,7 @@ function privacyPage() {
 }
 
 function termsPage() {
-  return `<article class="narrow legal"><p class="eyebrow">TERMS · EFFECTIVE AUGUST 28, 2026</p><h1>Use checkpoints on lessons you may edit</h1><p>Run Before Next is provided under these terms and the repository’s MIT license.</p><h2>Acceptable use</h2><p>Only add manifests to lesson pages you control. Do not use the extension to copy videos or bypass access controls.</p><h2>Sandbox limits</h2><p>The sandbox runs short JavaScript console exercises. Authors are responsible for the accuracy and safety of their checkpoint content.</p><h2>Existing Creator Kit licenses</h2><p>Creator Kit sales are paused. A refunded, expired, or revoked license stops access to its manifest builder.</p><h2>No warranty</h2><p>The software is provided “as is” without warranty. Keep copies of author manifests you create.</p><h2>Contact</h2><p>For terms questions, email <a href="mailto:support@sociobot.in">support@sociobot.in</a>.</p></article>`;
+  return `<article class="narrow legal"><p class="eyebrow">TERMS · EFFECTIVE AUGUST 28, 2026</p><h1>Use checkpoints on lessons you may edit</h1><p>Run Before Next is provided under these terms and the repository’s MIT license.</p><h2>Acceptable use</h2><p>Only add manifests to lesson pages you control. Do not use the extension to copy videos or bypass access controls.</p><h2>Sandbox limits</h2><p>The sandbox runs short JavaScript console exercises. Authors are responsible for the accuracy and safety of their checkpoint content.</p><h2>Existing Creator Kit licenses</h2><p>Creator Kit sales are paused. Existing licenses can restore manifest-builder access after verification.</p><h2>No warranty</h2><p>The software is provided “as is” without warranty. Keep copies of author manifests you create.</p><h2>Contact</h2><p>For terms questions, email <a href="mailto:support@sociobot.in">support@sociobot.in</a>.</p></article>`;
 }
 
 function notFoundPage() {
@@ -100,7 +101,7 @@ function notFoundPage() {
 }
 
 function bindCommon() {
-  document.querySelector('#reset-demo')?.addEventListener('click', () => { demoCode = SAMPLE_MANIFEST.checkpoints[0].starterCode; demoPassed = false; render(); });
+  document.querySelector('#reset-demo')?.addEventListener('click', () => { demoRunId++; demoCode = SAMPLE_MANIFEST.checkpoints[0].starterCode; demoPassed = false; render(); });
 }
 
 function bindDemo() {
@@ -109,19 +110,35 @@ function bindDemo() {
   const state = document.querySelector<HTMLSpanElement>('#demo-state')!;
   textarea.value = demoCode;
   const run = async () => {
+    const runId = ++demoRunId;
+    const button = document.querySelector<HTMLButtonElement>('#run-demo')!;
     demoCode = textarea.value;
     output.className = 'output running'; output.innerHTML = '<span>OUTPUT</span><p>Running in the JavaScript sandbox…</p>';
-    if (demoCode === SAMPLE_MANIFEST.checkpoints[0].starterCode) return showDemoError('Change the starter code before you run the check.');
+    if (demoCode === SAMPLE_MANIFEST.checkpoints[0].starterCode) return showDemoError('Change the starter code before you run the check.', runId);
+    button.disabled = true;
     const result = await runJavaScript(demoCode);
-    if (result.error) return showDemoError(`The code stopped: ${result.error} Fix it, then run the check again.`);
-    if (result.output.trim() !== SAMPLE_MANIFEST.checkpoints[0].expectedOutput) return showDemoError(`Output: ${result.output || '(nothing)'}. Expected: 6, 10, 14. Change the code and run it again.`);
+    if (runId !== demoRunId) return;
+    button.disabled = false;
+    if (result.error) return showDemoError(`The code stopped: ${result.error} Fix it, then run the check again.`, runId);
+    if (result.output.trim() !== SAMPLE_MANIFEST.checkpoints[0].expectedOutput) return showDemoError(`Output: ${result.output || '(nothing)'}. Expected: 6, 10, 14. Change the code and run it again.`, runId);
     demoPassed = true; state.textContent = 'Passed'; state.className = 'passed';
     output.className = 'output pass'; output.innerHTML = `<span>OUTPUT · PASSED</span><p>${escapeHtml(result.output)}</p>`;
-    const button = document.querySelector<HTMLButtonElement>('#run-demo')!; button.textContent = 'Checkpoint passed'; button.disabled = true;
+    button.textContent = 'Checkpoint passed'; button.disabled = true;
   };
-  const showDemoError = (message: string) => { demoPassed = false; state.textContent = 'Try again'; state.className = 'failed'; output.className = 'output fail'; output.innerHTML = `<span>OUTPUT · NOT YET</span><p>${escapeHtml(message)}</p>`; };
+  const showDemoError = (message: string, runId: number) => {
+    if (runId !== demoRunId) return;
+    demoPassed = false;
+    state.textContent = 'Try again';
+    state.className = 'failed';
+    output.className = 'output fail';
+    output.innerHTML = `<span>OUTPUT · NOT YET</span><p>${escapeHtml(message)}</p>`;
+    const button = document.querySelector<HTMLButtonElement>('#run-demo')!;
+    button.disabled = false;
+    button.innerHTML = 'Run check <kbd>Ctrl ↵</kbd>';
+  };
   document.querySelector('#run-demo')!.addEventListener('click', run);
   document.querySelector('#reset-code')!.addEventListener('click', () => {
+    demoRunId++;
     textarea.value = SAMPLE_MANIFEST.checkpoints[0].starterCode;
     demoCode = textarea.value;
     demoPassed = false;

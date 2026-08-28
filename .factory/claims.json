@@ -57,7 +57,7 @@
   },
   {
     "id": "source-not-saved",
-    "claim": "Learner source code is not saved after a checkpoint pass.",
+    "claim": "Learner source code is not uploaded or saved after a checkpoint pass.",
     "where": "landing facts, privacy page, and README",
     "test": "npm test -- --grep @claim:source-not-saved",
     "sandbox": "fresh Chromium extension profile; pass the fixture and inspect all chrome.storage.local values"
@@ -68,5 +68,47 @@
     "where": "landing boundaries and author documentation",
     "test": "npm run test:unit -- --testNamePattern @claim:template-allowlist",
     "sandbox": "bundled valid manifest changed to an unknown remote-python template"
+  },
+  {
+    "id": "checkpoint-sorting",
+    "claim": "The extension sorts valid checkpoints by time.",
+    "where": "README",
+    "test": "npm run test:unit -- --testNamePattern @claim:checkpoint-sorting",
+    "sandbox": "a valid two-checkpoint manifest supplied in reverse time order"
+  },
+  {
+    "id": "video-pause-gate",
+    "claim": "The lesson video stays paused until the checkpoint passes and the learner chooses Resume lesson.",
+    "where": "landing, metadata, and README",
+    "test": "npm test -- --grep @claim:video-pause-gate",
+    "sandbox": "fresh Chromium extension profile with a playable MediaStream video; call video.play while the checkpoint dialog is active"
+  },
+  {
+    "id": "video-local-only",
+    "claim": "The extension checks the page video locally; it does not scrape, host, copy, or redistribute the video.",
+    "where": "landing and README",
+    "test": "npm test -- --grep @claim:video-local-only",
+    "sandbox": "fresh Chromium extension profile with a local playable video; record all HTTP requests during checkpoint open, run, and resume"
+  },
+  {
+    "id": "sandbox-no-extension-apis",
+    "claim": "Learner code runs in a sandbox with no extension APIs.",
+    "where": "README",
+    "test": "npm test -- --grep @claim:sandbox-no-extension-apis",
+    "sandbox": "fresh Chromium extension profile; run console.log(typeof chrome) in the declared extension sandbox"
+  },
+  {
+    "id": "license-check-cadence",
+    "claim": "License verification runs at most once daily and never blocks the free extension download.",
+    "where": "README",
+    "test": "npm test -- --grep @claim:license-check-cadence",
+    "sandbox": "fresh browser with a stale recorded valid license; hold the verification response, confirm the download is usable, then reload after caching"
+  },
+  {
+    "id": "site-local-assets",
+    "claim": "The site loads its code and images from this domain and does not load analytics, ads, or third-party fonts.",
+    "where": "privacy page",
+    "test": "npm test -- --grep @claim:site-local-assets",
+    "sandbox": "fresh browser visits every public route while recording requests"
   }
 ]

@@ -1,39 +1,43 @@
-# Run Before Next verification 5 handoff — FAIL
+# Run Before Next repair 5 handoff — ready to release
 
-## Release status
+## Scope
 
-**FAIL.** Independently verified on 2026-08-28 against commit `69599e1fcac6560ae1875b8ba69493ac673912e1` and <https://video-code-exit-tickets.sociobot.in>. Production matches the candidate, but release remains blocked.
+Repaired the release blockers reported in independent verification 5 for candidate `69599e1fcac6560ae1875b8ba69493ac673912e1`.
 
-## Blocking evidence
+- The extension checkpoint now makes the lesson body inert, covers it with a pointer-blocking backdrop, traps Tab and Shift+Tab inside the dialog, and restores the page only after **Resume lesson**.
+- A checkpoint now re-pauses the page video on `play`, `playing`, and later `timeupdate` events. A host player cannot advance it before the required check passes.
+- Demo runs now disable Run check while pending and use a monotonically increasing run id. Reset cancels the prior run, so a stale timeout cannot overwrite a later pass.
+- At 390×844, the home screen now leads with the job, audience, and sample action; product art follows the first action. Persistent demo controls and the wordmark meet the 44 px target minimum.
+- Added claim registration and regression coverage for local video handling, sandbox API isolation, checkpoint sorting, license verification cadence/non-blocking download, and site-wide local-only assets. Removed two public promises that were not independently testable as stated.
 
-1. **P1 — checkpoint bypass:** the extension's `aria-modal` dialog does not trap focus or inert the lesson. From the focused editor, Tab reaches Run, Reset, the page body, then the underlying video. Pressing Space resumed a real video to 0.530513 s without a pass while the checkpoint remained open. A host `video.play()` call likewise advanced playback from 0.382390 s to 1.073692 s. The core “pass before resume” job is not enforced.
-2. **P1 — mobile first-read gate:** at 390×844, the audience sentence extends below the first viewport and **Try it with sample data** starts at y=881.81 px. The required first action is absent from the first screen. See [evidence](evidence/verification-5/mobile-first-screen.png).
-3. **P1 — claims contract:** public promises about video scraping/copying, sandbox extension APIs, checkpoint sorting, daily license verification/non-blocking behavior, and site-wide analytics/font requests are not registered in `.factory/claims.json` with dedicated claim tests.
-4. **P2 — overlapping demo runs:** a corrected run can pass, then a stale endless-run timeout overwrites it with `Try again` while **Checkpoint passed** remains disabled.
-5. **P2 — touch targets:** mobile **Reset demo** and **Start for real** are only 23.7 px high; the wordmark is 33.6 px high, below the 44 px minimum.
+## Verification evidence
 
-## What passed
+All commands ran in this repair container on 2026-08-28.
 
-- All ten exact `.factory/claims.json` commands pass.
-- `npm run check`, `npm run test:unit` (3/3), `npm test` (15/15), `npm run build`, ZIP integrity, and `npm audit --omit=dev --audit-level=high` pass.
-- Initial JS is 19,896 B (7,167 B gzip); CSS is 15,386 B (4,311 B gzip); mobile hero is 22,334 B.
-- Normal, empty, wrong-output, syntax-error, runtime-error, timeout, corrected retry, keyboard shortcut, reset, license-error, and real-video successful-resume paths were exercised.
-- Demo requests stayed same-origin or local Blob workers. Demo local/session storage, IndexedDB, and OPFS remained empty.
-- Axe reported no serious/critical findings on all routes and the 404 page. Supported pages had no console/page errors.
-- Security headers, immutable hashed-asset caching, real 404 status, reduced motion, service-worker update, and offline reload pass.
-- The license endpoint allows 30 requests per burst; requests 31–40 returned 429 with `Retry-After: 2–3`.
-- All served site files match the candidate byte-for-byte. The live ZIP's unpacked extension files also match exactly.
+| Check | Result |
+| --- | --- |
+| `npm ci` | PASS — 447 packages installed. npm reports 11 development-dependency advisories; see below. |
+| `npm run check` | PASS |
+| `npm run test:unit` | PASS — 3/3 |
+| `npm test` | PASS — 19/19 Playwright checks (the full suite was also exercised in focused desktop/mobile groups) |
+| Registered unit claims | PASS: `@claim:template-allowlist`, `@claim:checkpoint-sorting` |
+| Registered new browser claims | PASS: `@claim:site-local-assets`, `@claim:license-check-cadence`, `@claim:video-pause-gate`, `@claim:video-local-only`, `@claim:sandbox-no-extension-apis` |
+| Browser accessibility | PASS — Axe reports no serious/critical findings on `/`, `/demo`, `/creator`, `/privacy`, `/terms`, and the 404 route |
+| Keyboard/mobile/offline | PASS — focus trap and Ctrl/⌘+Enter; 390×844 home and demo checks; no horizontal overflow; offline demo reload after first visit |
+| `npm run build` | PASS — creates `dist/site/` and `dist/site/downloads/run-before-next-chrome.zip` |
+| `unzip -t dist/site/downloads/run-before-next-chrome.zip` | PASS |
+| `npm audit --omit=dev --audit-level=high` | PASS — 0 shipped-production vulnerabilities |
+| Lighthouse against production fixture | PASS — Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.1 s, LCP 1.4 s, CLS 0 |
 
-## Commands
+Current first-load assets: JS 20,077 B (7,210 B gzip), CSS 15,667 B (4,350 B gzip), mobile hero 22,334 B, desktop hero 48,300 B, extension zip about 10.1 KB. All are within the product budgets.
 
-```sh
-npm ci
-npm run check
-npm run test:unit
-npm test
-npm run build
-npm audit --omit=dev --audit-level=high
-unzip -t dist/site/downloads/run-before-next-chrome.zip
-```
+The core regression uses a real playable canvas `MediaStream` attached to the fixture `VIDEO`. It proves the video advances before opening, then proves a programmatic `video.play()` remains paused with less than 0.05 s advance while the modal is active. It also proves body inertness, a circular keyboard tab order, `typeof chrome === "undefined"` inside the sandbox, local-only HTTP requests, and explicit resume after a pass.
 
-Full evidence and repair guidance are in `.factory/verification-5.md`. No product code was changed; only this handoff, the verification report, and the mobile evidence screenshot were added.
+## Deployment
+
+Artifact class remains **Chrome MV3 browser extension plus static site**. Build and deploy the static root `dist/site/`; the packaged extension is available at `dist/site/downloads/run-before-next-chrome.zip`. The configured production identity is `https://video-code-exit-tickets.sociobot.in`.
+
+## Known notes
+
+- `npm ci` reports 11 advisories in development tooling (2 moderate, 5 high, 4 critical). The production-only audit is clean; no dependency update was made during this scoped repair.
+- No separate lint command exists; strict TypeScript checking is the repository's type/lint gate.

@@ -4,3 +4,9 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.primary{transition:none}.primary:hover{transform:none}}
 .demo-banner button{color:var(--lime-ink)}
 .editor-actions kbd{margin-left:8px}
+
+/* The first mobile screen leads with the learner's action, then the artwork. */
+.wordmark{min-height:44px}
+.demo-banner button,.demo-banner a{min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:900px){.hero-copy{grid-row:1;margin-top:0}.hero-art{grid-row:2}}
+@media(max-width:600px){.hero-copy{margin-top:0}.hero-art{margin:8px -48vw 0 -25vw}}

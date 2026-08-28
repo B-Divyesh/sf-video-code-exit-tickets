@@ -54,6 +54,7 @@ class CheckpointController {
   private runId = '';
   private runTimeout?: number;
   private storageKey: string;
+  private pageLock?: { inert: boolean; overflow: string };
 
   constructor(private manifest: LessonManifest) {
     this.storageKey = `progress:${location.origin}${location.pathname}:${manifest.title}`;
@@ -79,9 +80,18 @@ class CheckpointController {
   private bindVideo(video: HTMLVideoElement) {
     this.video = video;
     video.addEventListener('timeupdate', () => {
+      if (this.current) {
+        this.keepVideoPaused();
+        return;
+      }
       const next = this.nextCheckpoint();
       if (next && video.currentTime >= next.at) this.open(next);
     });
+    // Host players can call play() directly, before another timeupdate fires.
+    // A checkpoint is a hard pause until its check has passed and the learner
+    // explicitly chooses to resume.
+    video.addEventListener('play', () => this.keepVideoPaused());
+    video.addEventListener('playing', () => this.keepVideoPaused());
   }
 
   status() {
@@ -96,11 +106,34 @@ class CheckpointController {
   private nextCheckpoint() { return this.manifest.checkpoints.find((item) => !this.passed.has(item.id)); }
 
   private open(checkpoint: Checkpoint) {
-    if (this.current?.id === checkpoint.id) return;
+    if (this.current?.id === checkpoint.id) {
+      this.keepVideoPaused();
+      return;
+    }
     this.current = checkpoint;
-    this.video?.pause();
+    this.lockPage();
+    this.keepVideoPaused();
     if (!this.host) this.mount();
     this.render(checkpoint);
+  }
+
+  private keepVideoPaused() {
+    if (this.current && this.video && !this.video.paused) this.video.pause();
+  }
+
+  private lockPage() {
+    if (this.pageLock) return;
+    const body = document.body;
+    this.pageLock = { inert: body.inert, overflow: body.style.overflow };
+    body.inert = true;
+    body.style.overflow = 'hidden';
+  }
+
+  private unlockPage() {
+    if (!this.pageLock) return;
+    document.body.inert = this.pageLock.inert;
+    document.body.style.overflow = this.pageLock.overflow;
+    this.pageLock = undefined;
   }
 
   private mount() {
@@ -108,12 +141,13 @@ class CheckpointController {
     this.host.id = 'run-before-next-root';
     this.host.setAttribute('aria-label', 'Run Before Next checkpoint');
     this.shadow = this.host.attachShadow({ mode: 'open' });
-    this.shadow.innerHTML = `<style>${styles}</style><div class="shell" role="dialog" aria-modal="true" aria-labelledby="rbn-title"><div id="app"></div></div>`;
+    this.shadow.innerHTML = `<style>${styles}</style><div class="backdrop"><div class="shell" role="dialog" aria-modal="true" aria-labelledby="rbn-title"><div id="app"></div></div></div>`;
     this.sandbox = document.createElement('iframe');
     this.sandbox.src = chrome.runtime.getURL('/sandbox.html');
     this.sandbox.title = 'Code sandbox';
     this.sandbox.hidden = true;
     this.shadow.append(this.sandbox);
+    this.shadow.addEventListener('keydown', (event) => this.trapFocus(event as KeyboardEvent));
     document.documentElement.append(this.host);
     window.addEventListener('message', (event) => {
       if (event.source !== this.sandbox?.contentWindow) return;
@@ -121,6 +155,22 @@ class CheckpointController {
       if (event.data?.type !== 'RBN_RESULT' || event.data.id !== this.runId) return;
       this.handleResult(event.data.output || '', event.data.error);
     });
+  }
+
+  private trapFocus(event: KeyboardEvent) {
+    if (event.key !== 'Tab') return;
+    const controls = [...this.shadow!.querySelectorAll<HTMLElement>('textarea, button:not([disabled])')]
+      .filter((element) => !element.hidden && element.offsetParent !== null);
+    if (!controls.length) return;
+    const active = this.shadow!.activeElement as HTMLElement | null;
+    const index = active ? controls.indexOf(active) : -1;
+    if (event.shiftKey && (index <= 0 || !active)) {
+      event.preventDefault();
+      controls.at(-1)!.focus();
+    } else if (!event.shiftKey && index === controls.length - 1) {
+      event.preventDefault();
+      controls[0].focus();
+    }
   }
 
   private render(checkpoint: Checkpoint) {
@@ -177,12 +227,17 @@ class CheckpointController {
     result.className = 'result pass';
     result.textContent = `Passed. Output: ${output}`;
     const run = this.shadow!.querySelector<HTMLButtonElement>('#rbn-run')!;
-    run.textContent = 'Resume lesson';
-    run.onclick = () => {
+    const resume = run.cloneNode(false) as HTMLButtonElement;
+    resume.id = 'rbn-run';
+    resume.className = run.className;
+    resume.textContent = 'Resume lesson';
+    run.replaceWith(resume);
+    resume.addEventListener('click', () => {
       this.host?.remove(); this.host = undefined; this.shadow = undefined; this.sandbox = undefined; this.current = undefined;
+      this.unlockPage();
       void this.video?.play();
-    };
-    run.focus();
+    });
+    resume.focus();
   }
 }
 
@@ -190,6 +245,6 @@ function escapeHtml(value: string) { const span = document.createElement('span')
 
 const styles = `
 :host{all:initial;color-scheme:dark;font-family:ui-sans-serif,system-ui,sans-serif;color:#f2f7ed}
-*{box-sizing:border-box}.shell{position:fixed;z-index:2147483647;right:20px;bottom:20px;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 40px);overflow:auto;padding:24px;background:rgba(12,27,24,.97);border:1px solid #4d7468;border-radius:20px 4px 20px 20px;box-shadow:0 24px 90px #000c;backdrop-filter:blur(18px)}
-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}h2{font:700 28px/1.1 'Arial Narrow',system-ui;margin:2px 0 12px}p{font:16px/1.5 system-ui;margin:0 0 16px;color:#dce9e3}.eyebrow{color:#c9ff63;font:700 12px/1.4 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;margin:0}.count{font:12px/1.4 ui-monospace,monospace;color:#adc3b9;white-space:nowrap}label{display:block;font:700 13px/1.4 system-ui;margin-bottom:8px}textarea{display:block;width:100%;min-height:180px;resize:vertical;background:#07110f;border:1px solid #52786d;border-radius:10px;padding:14px;color:#f2f7ed;font:15px/1.55 ui-monospace,monospace;tab-size:2}textarea:focus,button:focus-visible{outline:3px solid #73e6ff;outline-offset:3px}.actions{display:flex;gap:8px;margin:16px 0}button{min-height:44px;border:1px solid #52786d;border-radius:99px;padding:0 18px;color:#f2f7ed;background:#18352d;font:700 14px system-ui;cursor:pointer}.run{background:#c9ff63;color:#112000;border-color:#c9ff63}.run:hover{background:#dcff98}.reset:hover{background:#23463c}kbd{font:11px ui-monospace;margin-left:8px}.result{padding:12px 14px;border-left:3px solid #73e6ff;background:#0a1815;color:#dce9e3;font:14px/1.45 system-ui}.result.fail{border-color:#ff9188}.result.pass{border-color:#73e6aa;color:#d8ffe9}.result.running{border-color:#ffd36c}@media(max-width:520px){.shell{right:8px;bottom:8px;width:calc(100vw - 16px);padding:18px;max-height:calc(100vh - 16px)}header{display:block}.count{display:block;margin-bottom:12px}.actions{flex-direction:column}.actions button{width:100%}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+*{box-sizing:border-box}.backdrop{position:fixed;z-index:2147483647;inset:0;display:flex;justify-content:flex-end;align-items:flex-end;padding:20px;background:#07110f80}.shell{width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 40px);overflow:auto;padding:24px;background:rgba(12,27,24,.97);border:1px solid #4d7468;border-radius:20px 4px 20px 20px;box-shadow:0 24px 90px #000c;backdrop-filter:blur(18px)}
+header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}h2{font:700 28px/1.1 'Arial Narrow',system-ui;margin:2px 0 12px}p{font:16px/1.5 system-ui;margin:0 0 16px;color:#dce9e3}.eyebrow{color:#c9ff63;font:700 12px/1.4 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;margin:0}.count{font:12px/1.4 ui-monospace,monospace;color:#adc3b9;white-space:nowrap}label{display:block;font:700 13px/1.4 system-ui;margin-bottom:8px}textarea{display:block;width:100%;min-height:180px;resize:vertical;background:#07110f;border:1px solid #52786d;border-radius:10px;padding:14px;color:#f2f7ed;font:15px/1.55 ui-monospace,monospace;tab-size:2}textarea:focus,button:focus-visible{outline:3px solid #73e6ff;outline-offset:3px}.actions{display:flex;gap:8px;margin:16px 0}button{min-height:44px;border:1px solid #52786d;border-radius:99px;padding:0 18px;color:#f2f7ed;background:#18352d;font:700 14px system-ui;cursor:pointer}.run{background:#c9ff63;color:#112000;border-color:#c9ff63}.run:hover{background:#dcff98}.reset:hover{background:#23463c}kbd{font:11px ui-monospace;margin-left:8px}.result{padding:12px 14px;border-left:3px solid #73e6ff;background:#0a1815;color:#dce9e3;font:14px/1.45 system-ui}.result.fail{border-color:#ff9188}.result.pass{border-color:#73e6aa;color:#d8ffe9}.result.running{border-color:#ffd36c}@media(max-width:520px){.backdrop{padding:8px}.shell{width:calc(100vw - 16px);padding:18px;max-height:calc(100vh - 16px)}header{display:block}.count{display:block;margin-bottom:12px}.actions{flex-direction:column}.actions button{width:100%}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 `;

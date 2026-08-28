@@ -72,6 +72,24 @@ test('Reset code re-enables Run check after a passed demo checkpoint', async ({ 
   await expect(page.locator('#demo-state')).toHaveText('Not passed');
 });
 
+test('a cancelled demo run cannot overwrite a later pass', async ({ page }) => {
+  await page.goto('/demo');
+  const editor = page.getByLabel('JavaScript');
+  const run = page.getByRole('button', { name: /Run check/ });
+  await editor.fill('while (true) {}');
+  await run.click();
+  await expect(run).toBeDisabled();
+
+  await page.getByRole('button', { name: 'Reset code' }).click();
+  await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
+  await run.click();
+  await expect(page.getByText('OUTPUT · PASSED')).toBeVisible();
+  await page.waitForTimeout(1400);
+  await expect(page.locator('#demo-state')).toHaveText('Passed');
+  await expect(page.locator('#demo-output')).toContainText('6, 10, 14');
+  await expect(page.getByRole('button', { name: 'Checkpoint passed' })).toBeDisabled();
+});
+
 test('@claim:sandbox-isolation production CSP keeps eval out of the app and confines it to the sandbox', async ({ page }) => {
   const [app, sandbox] = await Promise.all([page.request.get('/demo'), page.request.get('/sandbox.html')]);
   expect(app.headers()['content-security-policy']).toContain("script-src 'self'");
@@ -112,8 +130,52 @@ test('@claim:privacy-demo keeps sample data out of storage and third-party reque
     // and is not a request that can leave the device.
     return request.protocol === 'blob:' || request.origin === 'http://127.0.0.1:4173';
   })).toBe(true);
-  const storage = await page.evaluate(() => ({ local: Object.keys(localStorage), session: Object.keys(sessionStorage) }));
-  expect(storage).toEqual({ local: [], session: [] });
+  const storage = await page.evaluate(async () => {
+    const storageManager = navigator.storage as StorageManager & { getDirectory?: () => Promise<FileSystemDirectoryHandle> };
+    const directory = storageManager.getDirectory ? await storageManager.getDirectory() : undefined;
+    const opfsEntries: string[] = [];
+    if (directory) {
+      const entries = (directory as unknown as { entries: () => AsyncIterable<[string, unknown]> }).entries();
+      for await (const [name] of entries) opfsEntries.push(name);
+    }
+    return { local: Object.keys(localStorage), session: Object.keys(sessionStorage), indexed: (await indexedDB.databases()).map(item => item.name), opfs: opfsEntries };
+  });
+  expect(storage).toEqual({ local: [], session: [], indexed: [], opfs: [] });
+});
+
+test('@claim:site-local-assets loads every public route without third-party assets, analytics, ads, or fonts', async ({ page }) => {
+  const outgoing: string[] = [];
+  page.on('request', request => outgoing.push(request.url()));
+  for (const path of ['/', '/demo', '/creator', '/privacy', '/terms', '/missing-page']) await page.goto(path);
+  expect(outgoing.every(url => {
+    const request = new URL(url);
+    return request.protocol === 'blob:' || request.origin === 'http://127.0.0.1:4173';
+  })).toBe(true);
+});
+
+test('@claim:license-check-cadence verifies an uncached license once daily without blocking the free download', async ({ page }) => {
+  let verificationRequests = 0;
+  let releaseVerification: (() => void) | undefined;
+  const verificationReady = new Promise<void>(resolve => { releaseVerification = resolve; });
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('sb_license:video-code-exit-tickets')) {
+      localStorage.setItem('sb_license:video-code-exit-tickets', 'daily-license-fixture');
+      localStorage.setItem('sb_license_cache:video-code-exit-tickets', JSON.stringify({ valid: true, checkedAt: 0 }));
+    }
+  });
+  await page.route('https://api.sociobot.in/api/v1/products/video-code-exit-tickets/verify?license=daily-license-fixture', async route => {
+    verificationRequests++;
+    await verificationReady;
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok' }) });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'Download extension' })).toBeVisible();
+  await expect.poll(() => verificationRequests).toBe(1);
+  releaseVerification!();
+  await expect.poll(() => page.evaluate(() => Boolean(JSON.parse(localStorage.getItem('sb_license_cache:video-code-exit-tickets') || 'null')?.checkedAt))).toBe(true);
+  await page.reload();
+  await page.waitForTimeout(150);
+  expect(verificationRequests).toBe(1);
 });
 
 test('@claim:extension-download downloads the packaged Chrome extension', async ({ page }) => {
@@ -190,6 +252,25 @@ test('mobile demo keeps the editor and actions visible at 390px', async ({ page 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test('the 390px first screen shows the job, audience, sample action, and 44px key targets', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  for (const text of [
+    'Prove your code before the video continues',
+    'For video learners who need to change and run each idea before moving on.',
+    'Try it with sample data'
+  ]) {
+    const box = await page.getByText(text, { exact: true }).boundingBox();
+    expect(box?.y, text).toBeGreaterThanOrEqual(0);
+    expect((box?.y || 0) + (box?.height || 0), text).toBeLessThanOrEqual(844);
+  }
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  for (const target of [page.getByRole('button', { name: 'Reset demo' }), page.getByRole('link', { name: 'Start for real' }), page.getByRole('link', { name: 'Run Before Next home' })]) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test('demo reloads after the first visit while offline', async ({ page, context }) => {
   await page.goto('/demo');
   await page.evaluate(async () => {
@@ -219,7 +300,7 @@ test('keyboard run, history, internal links, and console stay clean', async ({ p
   expect(errors).toEqual([]);
 });
 
-test('@claim:extension-flow @claim:source-not-saved extension opens the checkpoint and releases it after a passing run', async () => {
+test('@claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only extension enforces the checkpoint on a playable video and releases it after a passing run', async () => {
   const extensionPath = resolve('.output/chrome-mv3');
   let context: BrowserContext | undefined;
   try {
@@ -232,8 +313,30 @@ test('@claim:extension-flow @claim:source-not-saved extension opens the checkpoi
     if (!serviceWorker) serviceWorker = await context.waitForEvent('serviceworker');
     expect(serviceWorker.url()).toContain('chrome-extension://');
     const page = await context.newPage();
+    const httpRequests: string[] = [];
+    page.on('request', request => {
+      if (request.url().startsWith('http')) httpRequests.push(request.url());
+    });
     await page.goto('http://127.0.0.1:4173/extension-fixture.html');
     await expect(page.locator('html')).toHaveAttribute('data-run-before-next', 'ready');
+    await page.evaluate(async () => {
+      const video = document.querySelector<HTMLVideoElement>('video')!;
+      const canvas = document.createElement('canvas');
+      canvas.width = 2;
+      canvas.height = 2;
+      const context = canvas.getContext('2d')!;
+      const draw = () => {
+        context.fillStyle = `hsl(${performance.now() % 360} 80% 50%)`;
+        context.fillRect(0, 0, 2, 2);
+        requestAnimationFrame(draw);
+      };
+      draw();
+      video.srcObject = canvas.captureStream(30);
+      video.muted = true;
+      await video.play();
+    });
+    await expect.poll(() => page.locator('video').evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThan(0.05);
+    await page.locator('video').evaluate(video => (video as HTMLVideoElement).pause());
     const status = await serviceWorker.evaluate(async () => {
       const [tab] = await chrome.tabs.query({ url: 'http://127.0.0.1:4173/extension-fixture.html' });
       return chrome.tabs.sendMessage(tab.id!, { type: 'RBN_STATUS' });
@@ -246,7 +349,24 @@ test('@claim:extension-flow @claim:source-not-saved extension opens the checkpoi
     });
     await expect(host).toBeAttached();
     const editor = host.locator('textarea');
+    await expect(page.locator('body')).toHaveJSProperty('inert', true);
+    await editor.focus();
+    await page.keyboard.press('Tab');
+    await expect(host.getByRole('button', { name: /Run check/ })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(host.getByRole('button', { name: 'Reset code' })).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(editor).toBeFocused();
     const starter = await editor.inputValue();
+    const stoppedAt = await page.locator('video').evaluate(video => (video as HTMLVideoElement).currentTime);
+    await page.locator('video').evaluate(video => (video as HTMLVideoElement).play().catch(() => undefined));
+    await page.waitForTimeout(700);
+    const stillPaused = await page.locator('video').evaluate(video => ({ paused: (video as HTMLVideoElement).paused, currentTime: (video as HTMLVideoElement).currentTime }));
+    expect(stillPaused.paused).toBe(true);
+    expect(stillPaused.currentTime - stoppedAt).toBeLessThan(0.05);
+    await editor.fill('console.log(typeof chrome)');
+    await host.getByRole('button', { name: /Run check/ }).click();
+    await expect(host.getByText('Output: undefined. Expected: 6, 10, 14.')).toBeVisible();
     await editor.fill('while (true) {}');
     await host.getByRole('button', { name: /Run check/ }).click();
     await expect(host.getByText('The code ran for too long. Check for an endless loop.')).toBeVisible({ timeout: 2500 });
@@ -254,10 +374,13 @@ test('@claim:extension-flow @claim:source-not-saved extension opens the checkpoi
     await host.getByRole('button', { name: /Run check/ }).click();
     await expect(host.getByText(/Passed\. Output: 6, 10, 14/)).toBeVisible();
     const stored = await serviceWorker.evaluate(() => chrome.storage.local.get(null));
+    expect(Object.keys(stored)).toHaveLength(1);
     expect(JSON.stringify(stored)).not.toContain('const prices');
     expect(JSON.stringify(stored)).toContain('double-prices');
     await host.getByRole('button', { name: 'Resume lesson' }).click();
     await expect(host).toHaveCount(0);
+    await expect(page.locator('body')).toHaveJSProperty('inert', false);
+    expect(httpRequests.every(url => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
   } finally {
     await context?.close();
   }
