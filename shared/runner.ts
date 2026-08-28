@@ -3,39 +3,32 @@ export interface RunResult {
   error?: string;
 }
 
-export function workerSource(): string {
-  return `self.onmessage = (event) => {
-    const lines = [];
-    const format = (value) => typeof value === 'string' ? value : JSON.stringify(value);
-    const console = { log: (...values) => lines.push(values.map(format).join(' ')) };
-    try {
-      const execute = new Function('console', '\"use strict\";\\n' + event.data.code);
-      execute(console);
-      self.postMessage({ output: lines.join('\\n') });
-    } catch (error) {
-      self.postMessage({ output: lines.join('\\n'), error: error instanceof Error ? error.message : String(error) });
-    }
-  };`;
-}
-
 export function runJavaScript(code: string, timeoutMs = 1200): Promise<RunResult> {
   return new Promise((resolve) => {
-    const url = URL.createObjectURL(new Blob([workerSource()], { type: 'text/javascript' }));
-    const worker = new Worker(url);
+    const iframe = document.createElement('iframe');
+    const id = crypto.randomUUID();
+    iframe.src = '/sandbox.html';
+    iframe.sandbox.add('allow-scripts');
+    iframe.hidden = true;
+    iframe.title = 'JavaScript sandbox';
+    iframe.setAttribute('aria-hidden', 'true');
+
     const finish = (result: RunResult) => {
-      worker.terminate();
-      URL.revokeObjectURL(url);
+      window.clearTimeout(timeout);
+      window.removeEventListener('message', receive);
+      iframe.remove();
       resolve(result);
     };
+
     const timeout = window.setTimeout(() => finish({ output: '', error: 'The code ran for too long. Check for an endless loop.' }), timeoutMs);
-    worker.onmessage = (event: MessageEvent<RunResult>) => {
-      window.clearTimeout(timeout);
-      finish(event.data);
+    const send = () => iframe.contentWindow?.postMessage({ type: 'RBN_RUN', id, code }, '*');
+    const receive = (event: MessageEvent<RunResult & { type?: string; id?: string }>) => {
+      if (event.source !== iframe.contentWindow) return;
+      if (event.data?.type === 'RBN_READY') { send(); return; }
+      if (event.data?.type !== 'RBN_RESULT' || event.data.id !== id) return;
+      finish({ output: event.data.output || '', error: event.data.error });
     };
-    worker.onerror = () => {
-      window.clearTimeout(timeout);
-      finish({ output: '', error: 'The sandbox could not run this code. Check the syntax and run it again.' });
-    };
-    worker.postMessage({ code });
+    window.addEventListener('message', receive);
+    document.body.append(iframe);
   });
 }

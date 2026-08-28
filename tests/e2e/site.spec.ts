@@ -3,6 +3,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { resolve } from 'node:path';
 
 test('@claim:demo-pass runs changed code and passes the sample checkpoint', async ({ page }) => {
+  const main = await page.request.get('/demo');
+  expect(main.headers()['content-security-policy']).toContain("script-src 'self'");
+  expect(main.headers()['content-security-policy']).not.toContain("script-src 'self' 'unsafe-eval'");
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   const editor = page.getByLabel('JavaScript');
@@ -11,6 +14,28 @@ test('@claim:demo-pass runs changed code and passes the sample checkpoint', asyn
   await expect(page.getByText('OUTPUT · PASSED')).toBeVisible();
   await expect(page.locator('#demo-output p')).toHaveText('6, 10, 14');
   await expect(page.locator('#demo-state')).toHaveText('Passed');
+});
+
+test('production CSP keeps eval out of the app and confines it to the sandbox', async ({ page }) => {
+  const [app, sandbox] = await Promise.all([page.request.get('/demo'), page.request.get('/sandbox.html')]);
+  expect(app.headers()['content-security-policy']).toContain("script-src 'self'");
+  expect(app.headers()['content-security-policy']).not.toContain("'unsafe-eval'");
+  expect(sandbox.headers()['content-security-policy']).toContain("script-src 'self' 'unsafe-eval'");
+  expect(sandbox.headers()['content-security-policy']).toContain("connect-src 'none'");
+  await page.goto('/demo');
+  await page.getByLabel('JavaScript').fill('console.log("sandbox works")');
+  await page.getByRole('button', { name: /Run check/ }).click();
+  await expect(page.locator('#demo-output')).toContainText('Expected: 6, 10, 14');
+});
+
+test('production headers cache hashed assets immutably and keep update entry points fresh', async ({ page }) => {
+  await page.goto('/');
+  const script = await page.locator('script[type="module"]').getAttribute('src');
+  expect(script).toMatch(/^\/assets\/.*-[\w-]+\.js$/);
+  const [asset, serviceWorker, document] = await Promise.all([page.request.get(script!), page.request.get('/sw.js'), page.request.get('/index.html')]);
+  expect(asset.headers()['cache-control']).toBe('public, max-age=31536000, immutable');
+  expect(serviceWorker.headers()['cache-control']).toBe('no-cache');
+  expect(document.headers()['cache-control']).toBe('no-cache');
 });
 
 test('@claim:privacy-demo keeps sample data out of storage and third-party requests', async ({ page }) => {
@@ -73,7 +98,11 @@ test('mobile demo keeps the editor and actions visible at 390px', async ({ page 
 
 test('demo reloads after the first visit while offline', async ({ page, context }) => {
   await page.goto('/demo');
-  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+  await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.ready;
+    await registration.update();
+    if (!registration.active) throw new Error('Service worker did not activate');
+  });
   await page.reload();
   await context.setOffline(true);
   await page.reload();

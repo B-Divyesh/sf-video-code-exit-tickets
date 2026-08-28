@@ -13,7 +13,7 @@ export default defineConfig({
     ...devices['Desktop Chrome']
   },
   webServer: {
-    command: 'npm run build:site && npx vite preview --config site/vite.config.ts --host 127.0.0.1 --port 4173',
+    command: 'npm run build:site && node tests/production-server.mjs',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 30000
