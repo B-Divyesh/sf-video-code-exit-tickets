@@ -1,0 +1,51 @@
+[
+  {
+    "id": "demo-pass",
+    "claim": "Runs changed JavaScript and passes the checkpoint when output is 6, 10, 14.",
+    "where": "demo checkpoint",
+    "test": "npm test -- --grep @claim:demo-pass",
+    "sandbox": "fresh browser context at /demo using the bundled arrays lesson"
+  },
+  {
+    "id": "privacy-demo",
+    "claim": "Demo sample data is not saved and no demo request leaves the site origin.",
+    "where": "demo banner and privacy page",
+    "test": "npm test -- --grep @claim:privacy-demo",
+    "sandbox": "fresh browser context; record requests and inspect local and session storage after passing"
+  },
+  {
+    "id": "extension-download",
+    "claim": "Downloads the packaged Chrome extension.",
+    "where": "site header and README",
+    "test": "npm test -- --grep @claim:extension-download",
+    "sandbox": "fresh browser context; assert a run-before-next-chrome.zip download"
+  },
+  {
+    "id": "manifest-export",
+    "claim": "Creator Kit downloads a validated version 1 manifest.",
+    "where": "paid tier and manifest builder",
+    "test": "npm test -- --grep @claim:manifest-export",
+    "sandbox": "fresh browser context with a cached valid fixture verdict; assert downloaded JSON fields"
+  },
+  {
+    "id": "extension-flow",
+    "claim": "The extension opens a manifest checkpoint, runs changed code, records the pass, and releases the lesson.",
+    "where": "landing how-it-works section and README",
+    "test": "npm test -- --grep @claim:extension-flow",
+    "sandbox": "fresh Chromium profile with the unpacked built extension and the bundled lesson fixture"
+  },
+  {
+    "id": "source-not-saved",
+    "claim": "Learner source code is not saved after a checkpoint pass.",
+    "where": "landing facts, privacy page, and README",
+    "test": "npm test -- --grep @claim:source-not-saved",
+    "sandbox": "fresh Chromium extension profile; pass the fixture and inspect all chrome.storage.local values"
+  },
+  {
+    "id": "template-allowlist",
+    "claim": "Version one accepts only the JavaScript console sandbox template.",
+    "where": "landing boundaries and author documentation",
+    "test": "npm run test:unit -- --testNamePattern @claim:template-allowlist",
+    "sandbox": "bundled valid manifest changed to an unknown remote-python template"
+  }
+]
