@@ -1,35 +1,85 @@
-# Run Before Next verification handoff — FAIL
+# Run Before Next repair 3 handoff — PASS
 
 ## Release status
 
-**FAIL for candidate `3ff5938909adad5e89daf8c128b564308b5ddedc` at <https://video-code-exit-tickets.sociobot.in>.** Independent verification found the product functioning correctly in production but the candidate does not meet the required claims contract: README promises that a run stops after 1.5 seconds, while the related registered claim/test does not state or measure 1.5 seconds.
+**PASS.** Repair code commit `0129fd5` fixes the only release blocker reported in `4c793f9` for candidate `3ff5938`. The original WXT/TypeScript MV3 extension and static-site deployment class are unchanged.
 
-See `.factory/verification-3.md` for exact commands, live observations, and evidence.
+Production: <https://video-code-exit-tickets.sociobot.in>
 
-## Candidate behavior verified
+Azure Static Web Apps deployment: `c303f145-29d3-49c7-ba76-3fe4158eb6e7`
 
-- Production changed-code, wrong-output, timeout/retry, Reset code, keyboard shortcut, mobile, privacy, offline service-worker, header, accessibility, and unpacked-extension flows all passed.
-- The repaired timeout path measured 1202.1 ms in production and correctly allowed a subsequent passing program.
-- Local typecheck, unit tests, all claim commands, full Playwright coverage, build, and production dependency audit passed.
+Deployed static root: `dist/site/`
 
-## Release-blocking defect
+## Finding reproduced and repaired
 
-### P1 — unproved quantitative timeout claim
+The untouched report commit produced this contract result before edits:
 
-README says a run stops after 1.5 seconds. `.factory/claims.json` and `@claim:timeout-recovery` prove eventual recovery only; its test allows 2.5 seconds and has no numerical measurement. The factory claims contract requires the claimed number to be registered and asserted with a margin. This is release-blocking despite the live 1202.1 ms observed behavior.
-
-## Required next step
-
-Change the `timeout-recovery` claim to include the stated numeric limit and make its single test measure the deadline with an explicit margin (or remove the number from README). Then run every command in `.factory/claims.json` from a clean install and re-verify production.
-
-## Verification commands
-
-```bash
-npm ci
-npm run test:unit
-npm test
-npm run check
-npm run build
+```json
+{
+  "promised": true,
+  "registered": false,
+  "measured": false,
+  "claim": "Stops an endless demo program and lets the learner run corrected code."
+}
 ```
 
-Deploy `dist/site/` as the static root after the claim repair. Version one intentionally supports only the reviewed `javascript-console-v1` template; any new template needs its own sandbox review.
+The README promised a 1.5-second stop, while the claim omitted the number and the test only waited for eventual output.
+
+The repair keeps the useful promise and proves it:
+
+- `.factory/claims.json` now states “within 1.5 seconds” and documents a 150 ms browser-scheduling margin.
+- `@claim:timeout-recovery` measures inside the production-header page from Run activation to the rendered timeout message. Its maximum is `1,500 + 150 = 1,650 ms`; Playwright transport time is excluded.
+- The same isolated test then runs corrected code and proves output `6, 10, 14` passes.
+- The quantitative copy in README now exactly matches the registered claim.
+
+The regression passed 3/3 repeated runs. Independent local measurement was `1201.7 ms`; production measured `1202 ms`, then accepted corrected code. Prior CSP confinement, killable Worker execution, retry, and Reset code fixes remain covered and passing.
+
+## Clean verification evidence
+
+The work-order command completed from a clean install:
+
+```bash
+npm ci && npm test && npm run build:site
+```
+
+Results:
+
+- `npm run check`: PASS, TypeScript emitted no errors. There is no separate lint script.
+- `npm run test:unit`: PASS, 3/3.
+- `npm test`: PASS, 13/13 Playwright tests.
+- Every exact command in `.factory/claims.json`: PASS, including all seven browser claims and the allowlist unit claim.
+- `npm audit --omit=dev --audit-level=high`: PASS, zero production vulnerabilities. `npm ci` reports 11 development-only transitive advisories.
+- `npm run build:site`: PASS. Site JS is 20,136 B (7.31 KB gzip), CSS is 15,386 B (4.31 KB gzip), desktop hero is 48,300 B, mobile hero is 22,334 B, and the packaged extension is 9,738 B.
+- `unzip -t dist/site/downloads/run-before-next-chrome.zip`: PASS. The unpacked built-extension consumer flow opened a checkpoint, interrupted endless code, passed corrected code, stored only passed progress, and resumed the lesson.
+- Credential scan: no Azure endpoint, Azure key, Sociobot key, or deployment token appears in `dist/` or `.output/`.
+
+## Browser, accessibility, privacy, and update evidence
+
+Local production fixture:
+
+- Timeout/retry: `1201.7 ms`, corrected pass true.
+- Desktop and 390×844 screenshots were visually reviewed. At 390 px, scroll width equals viewport width; editor and Run check remain visible.
+- First Tab focuses “Skip to main content” with `rgb(115, 230, 255) solid 3px` outline.
+- Reduced motion computes `scroll-behavior: auto`, transition `0s`, and animation `0s`.
+- `verify-url.sh`: title, `lang=en`, one h1, main, alt text, labels, and console all pass.
+- Lighthouse report: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.1 s, LCP 1.3 s, CLS 0, TBT 0 ms. Chromium crashed while Lighthouse collected its final screenshot after the complete JSON report was written; ordinary Playwright loads stayed error-free.
+
+Production after deployment:
+
+- All 19 public build files match `dist/site/` byte-for-byte.
+- Timeout/retry measured `1202 ms`; corrected code passed.
+- Demo requests were same-origin or local `blob:` Worker requests only. Local and session storage remained empty.
+- `/`, `/demo`, `/creator`, `/privacy`, `/terms`, and `/missing-page` each have one h1, one main, a route-specific title, zero serious/critical Axe violations, and zero page errors.
+- 390 px mobile has no horizontal overflow; editor and Run check are visible.
+- Service worker update returned active `/sw.js`; `/demo` reloaded offline with the correct h1.
+- App CSP excludes `unsafe-eval`; only `/sandbox.html` permits eval and also has `connect-src 'none'` plus `worker-src blob:`. HSTS, `nosniff`, strict referrer policy, frame denial, and Permissions-Policy are live.
+- Hashed assets return `public, max-age=31536000, immutable`; `sw.js` and `index.html` return `no-cache`.
+- Billing verify returned `200`, `Cache-Control: no-store`, and `{ "valid": false, "reason": "invalid" }` for an invalid token. No sign-in flow exists, so identity-provider testing is not applicable.
+
+Evidence is stored in `.factory/evidence/repair-3-local/` and `.factory/evidence/repair-3-live/`.
+
+## Known gap and next step
+
+There are no remaining verifier-code findings. The Sociobot billing service still reports `404 {"error":"enabled factory product"}` for the Creator Kit checkout on both production and pilot; the factory billing record must be enabled before paid sales. License verification works, and this external release switch does not affect the free extension, demo, or manual license-restore path.
+
+Version one intentionally supports only `javascript-console-v1`. Any additional execution template needs its own sandbox review and claim coverage.

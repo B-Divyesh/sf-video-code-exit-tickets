@@ -1,0 +1,37 @@
+{
+  "timeoutMs": 1202,
+  "correctedPass": true,
+  "storage": {
+    "local": [],
+    "session": []
+  },
+  "sameOriginRequestsOnly": true,
+  "mobile": {
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "editorVisible": true,
+    "runVisible": true
+  },
+  "keyboard": {
+    "firstTab": "Skip to main content",
+    "outline": "rgb(115, 230, 255) solid 3px"
+  },
+  "reducedMotion": {
+    "scrollBehavior": "auto",
+    "transitionDuration": "0s",
+    "animationDuration": "0s"
+  },
+  "routes": {
+    "/": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] },
+    "/demo": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] },
+    "/creator": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] },
+    "/privacy": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] },
+    "/terms": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] },
+    "/missing-page": { "h1": 1, "main": 1, "seriousOrCriticalAxeViolations": 0, "errors": [] }
+  },
+  "offline": {
+    "activeServiceWorker": "https://video-code-exit-tickets.sociobot.in/sw.js",
+    "reloadedH1": "Change the code before moving on"
+  },
+  "consoleErrors": []
+}

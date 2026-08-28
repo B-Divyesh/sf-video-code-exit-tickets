@@ -1,0 +1,20 @@
+{
+  "timeoutMs": 1201.7,
+  "correctedPass": true,
+  "mobile": {
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "runVisible": true,
+    "editorVisible": true
+  },
+  "keyboard": {
+    "firstTab": "Skip to main content",
+    "outline": "rgb(115, 230, 255) solid 3px"
+  },
+  "reducedMotion": {
+    "scrollBehavior": "auto",
+    "transitionDuration": "0s",
+    "animationDuration": "0s"
+  },
+  "consoleErrors": []
+}
