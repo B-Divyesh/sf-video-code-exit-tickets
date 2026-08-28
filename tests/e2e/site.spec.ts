@@ -20,8 +20,37 @@ test('@claim:timeout-recovery interrupts an endless demo run and lets the learne
   await page.goto('/demo');
   const editor = page.getByLabel('JavaScript');
   await editor.fill('while (true) {}');
+
+  await page.evaluate(() => {
+    type TimeoutTiming = { startedAt: number; renderedAt: number };
+    const timing: TimeoutTiming = { startedAt: 0, renderedAt: 0 };
+    const testWindow = window as Window & { __timeoutTiming?: TimeoutTiming };
+    testWindow.__timeoutTiming = timing;
+
+    document.querySelector<HTMLButtonElement>('#run-demo')?.addEventListener('click', () => {
+      timing.startedAt = performance.now();
+    }, { capture: true, once: true });
+
+    const output = document.querySelector('#demo-output');
+    const observer = new MutationObserver(() => {
+      if (output?.textContent?.includes('The code ran for too long. Check for an endless loop.')) {
+        timing.renderedAt = performance.now();
+        observer.disconnect();
+      }
+    });
+    if (output) observer.observe(output, { childList: true, subtree: true, characterData: true });
+  });
+
   await page.getByRole('button', { name: /Run check/ }).click();
   await expect(page.locator('#demo-output')).toContainText('The code ran for too long. Check for an endless loop.', { timeout: 2500 });
+  const elapsedMs = await page.evaluate(() => {
+    const timing = (window as Window & { __timeoutTiming?: { startedAt: number; renderedAt: number } }).__timeoutTiming;
+    if (!timing?.startedAt || !timing.renderedAt) throw new Error('Timeout rendering was not measured');
+    return timing.renderedAt - timing.startedAt;
+  });
+  const promisedTimeoutMs = 1500;
+  const browserSchedulingMarginMs = 150;
+  expect(elapsedMs, `timeout rendered in ${elapsedMs.toFixed(1)} ms`).toBeLessThanOrEqual(promisedTimeoutMs + browserSchedulingMarginMs);
   await expect(page.getByRole('button', { name: /Run check/ })).toBeEnabled();
   await editor.fill("const prices = [3, 5, 7];\nconst doubled = prices.map(price => price * 2);\nconsole.log(doubled.join(', '));");
   await page.getByRole('button', { name: /Run check/ }).click();

@@ -65,7 +65,7 @@ Times are seconds from the start of the first page video. Checkpoint ids must be
 
 ## Privacy and security
 
-Learner code runs in the extension’s declared sandbox page. The sandbox has no extension APIs. A run stops after 1.5 seconds if it does not return. The extension neither scrapes nor redistributes video.
+Learner code runs in the extension’s declared sandbox page. The sandbox has no extension APIs. A run stops within 1.5 seconds if it does not return. The extension neither scrapes nor redistributes video.
 
 Progress contains only page addresses and passed checkpoint ids. Removing the extension clears that data. See `/privacy` and `/terms` on the built site.
 

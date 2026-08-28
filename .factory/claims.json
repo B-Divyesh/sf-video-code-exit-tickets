@@ -15,10 +15,10 @@
   },
   {
     "id": "timeout-recovery",
-    "claim": "Stops an endless demo program and lets the learner run corrected code.",
+    "claim": "Stops an endless demo program within 1.5 seconds and lets the learner run corrected code.",
     "where": "demo checkpoint and README",
     "test": "npm test -- --grep @claim:timeout-recovery",
-    "sandbox": "fresh browser context at /demo; run while (true) {}, then run the bundled corrected arrays program"
+    "sandbox": "fresh browser context at /demo under production headers; measure click to rendered timeout against 1,500 ms with a 150 ms browser scheduling margin, then run the bundled corrected arrays program"
   },
   {
     "id": "extension-download",
