@@ -1,7 +1,7 @@
 [
   {
     "id": "demo-pass",
-    "claim": "Runs changed JavaScript and passes the checkpoint when output is 6, 10, 14.",
+    "claim": "Opens the sample without an account or setup, runs changed JavaScript, and passes when output is 6, 10, 14.",
     "where": "demo checkpoint",
     "test": "npm test -- --grep @claim:demo-pass",
     "sandbox": "fresh browser context at /demo using the bundled arrays lesson"
@@ -22,17 +22,31 @@
   },
   {
     "id": "extension-download",
-    "claim": "Downloads the packaged Chrome extension.",
+    "claim": "Downloads the free packaged Chrome extension without an account or payment.",
     "where": "site header and README",
     "test": "npm test -- --grep @claim:extension-download",
     "sandbox": "fresh browser context; assert a run-before-next-chrome.zip download"
   },
   {
     "id": "manifest-export",
-    "claim": "Creator Kit downloads a validated version 1 manifest.",
-    "where": "paid tier and manifest builder",
+    "claim": "Existing Creator Kit users can verify a license and download a validated version 1 manifest.",
+    "where": "existing-license section and manifest builder",
     "test": "npm test -- --grep @claim:manifest-export",
-    "sandbox": "fresh browser context with a cached valid fixture verdict; assert downloaded JSON fields"
+    "sandbox": "fresh browser context with a recorded valid verification response; restore a license, assert the verification request, and inspect downloaded JSON fields"
+  },
+  {
+    "id": "creator-sales-paused",
+    "claim": "Creator Kit sales are paused and the unavailable checkout is not shown.",
+    "where": "existing-license section, terms, and README",
+    "test": "npm test -- --grep @claim:creator-sales-paused",
+    "sandbox": "fresh browser context; assert the paused notice is visible and no checkout, purchase action, or price is advertised"
+  },
+  {
+    "id": "sandbox-isolation",
+    "claim": "Learner code runs in a declared browser sandbox whose outbound connections are blocked.",
+    "where": "landing boundaries and README",
+    "test": "npm test -- --grep @claim:sandbox-isolation",
+    "sandbox": "built site and extension; assert app CSP excludes eval while both declared sandbox policies allow the runner and block connections"
   },
   {
     "id": "extension-flow",

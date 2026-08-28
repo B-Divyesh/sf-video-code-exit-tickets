@@ -14,7 +14,7 @@ export default defineConfig({
     web_accessible_resources: [{ resources: ['sandbox.html', 'sandbox.js'], matches: ['<all_urls>'] }],
     content_security_policy: {
       extension_pages: "script-src 'self'; object-src 'self'",
-      sandbox: "sandbox allow-scripts; script-src 'self' 'unsafe-eval'; worker-src blob:; object-src 'none'"
+      sandbox: "sandbox allow-scripts; default-src 'none'; script-src 'self' 'unsafe-eval'; worker-src blob:; connect-src 'none'; object-src 'none'"
     }
   }
 });

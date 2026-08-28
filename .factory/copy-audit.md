@@ -29,11 +29,9 @@ Audited 2026-08-28. Counts treat contractions and hyphenated terms as one word. 
 | The extension only watches the local video time. | 8 | None |
 | Code runs inside an isolated browser sandbox. | 7 | None |
 | Version one accepts only the JavaScript console template. | 9 | None |
-| Build manifests with fewer mistakes | 5 | None |
-| The free extension reads hand-written manifests. | 6 | None |
-| The $29 Creator Kit adds a guided manifest builder and JSON download. | 12 | None |
-| Sociobot and Dodo are the merchant of record. | 9 | None |
-| A refund revokes the license. | 5 | None |
+| Restore your manifest builder | 4 | None |
+| Creator Kit sales are paused. | 5 | None |
+| Existing license holders can verify a license and use the guided manifest builder. | 13 | None |
 
 ## Terminology
 
@@ -45,7 +43,7 @@ Audited 2026-08-28. Counts treat contractions and hyphenated terms as one word. 
 | The required console text | expected output |
 | The isolated execution page | sandbox |
 | Successful completion | passed |
-| Paid author feature set | Creator Kit |
+| Existing author feature set | Creator Kit |
 | Purchased access token | license |
 
 Catalog description: “Prove your code change before the video continues.” (8 words, 50 characters)

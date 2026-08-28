@@ -12,7 +12,7 @@ Run Before Next is a Chrome MV3 extension for people learning programming from v
 - A packaged extension at `dist/site/downloads/run-before-next-chrome.zip`.
 - A static landing site and live sandbox demo in `dist/site/`.
 - One allowlisted sandbox template: `javascript-console-v1`.
-- A $29 one-time Creator Kit with license verification and a manifest builder.
+- License restore and a manifest builder for existing Creator Kit users. New sales are paused.
 
 The extension stores passed checkpoint ids and lesson page addresses. It does not store learner editor contents. The live demo records no sample edits in local or session storage.
 
@@ -69,7 +69,7 @@ Learner code runs in the extension’s declared sandbox page. The sandbox has no
 
 Progress contains only page addresses and passed checkpoint ids. Removing the extension clears that data. See `/privacy` and `/terms` on the built site.
 
-Paid access uses the Sociobot billing API. The browser stores a supplied license under `sb_license:video-code-exit-tickets`, verifies it at most once daily, and never blocks the free extension while checking.
+Existing Creator Kit access uses the Sociobot billing API. The browser stores a supplied license under `sb_license:video-code-exit-tickets`, verifies it at most once daily, and never blocks the free extension while checking. New Creator Kit sales are paused.
 
 ## Tests and claims
 

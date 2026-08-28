@@ -18,8 +18,12 @@ function headersFor(pathname) {
 
 createServer((request, response) => {
   const pathname = new URL(request.url || '/', `http://${request.headers.host}`).pathname;
-  const requested = normalize(join(root, decodeURIComponent(pathname)));
-  const safe = requested.startsWith(root) && existsSync(requested) && statSync(requested).isFile() ? requested : join(root, 'index.html');
-  response.writeHead(200, { ...headersFor(pathname), 'Content-Type': types[extname(safe)] || 'application/octet-stream' });
+  const route = config.routes?.find((item) => matches(item.route, pathname));
+  const target = route?.rewrite || (pathname === '/' ? '/index.html' : pathname);
+  const requested = normalize(join(root, decodeURIComponent(target)));
+  const found = requested.startsWith(root) && existsSync(requested) && statSync(requested).isFile();
+  const safe = found ? requested : join(root, config.responseOverrides?.['404']?.rewrite || '/404.html');
+  const status = found ? 200 : 404;
+  response.writeHead(status, { ...headersFor(pathname), 'Content-Type': types[extname(safe)] || 'application/octet-stream' });
   createReadStream(safe).pipe(response);
 }).listen(port, '127.0.0.1', () => console.log(`Production fixture listening on ${port}`));

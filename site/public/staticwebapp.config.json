@@ -1,7 +1,10 @@
 {
-  "navigationFallback": { "rewrite": "/index.html", "exclude": ["/assets/*", "/downloads/*", "/*.json", "/*.xml", "/*.txt", "/*.svg", "/*.png", "/sw.js"] },
   "responseOverrides": { "404": { "rewrite": "/404.html" } },
   "routes": [
+    { "route": "/demo", "rewrite": "/index.html" },
+    { "route": "/creator", "rewrite": "/index.html" },
+    { "route": "/privacy", "rewrite": "/index.html" },
+    { "route": "/terms", "rewrite": "/index.html" },
     {
       "route": "/assets/*",
       "headers": { "Cache-Control": "public, max-age=31536000, immutable" }

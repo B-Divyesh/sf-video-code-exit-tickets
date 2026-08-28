@@ -72,13 +72,16 @@ test('Reset code re-enables Run check after a passed demo checkpoint', async ({ 
   await expect(page.locator('#demo-state')).toHaveText('Not passed');
 });
 
-test('production CSP keeps eval out of the app and confines it to the sandbox', async ({ page }) => {
+test('@claim:sandbox-isolation production CSP keeps eval out of the app and confines it to the sandbox', async ({ page }) => {
   const [app, sandbox] = await Promise.all([page.request.get('/demo'), page.request.get('/sandbox.html')]);
   expect(app.headers()['content-security-policy']).toContain("script-src 'self'");
   expect(app.headers()['content-security-policy']).not.toContain("'unsafe-eval'");
   expect(sandbox.headers()['content-security-policy']).toContain("script-src 'self' 'unsafe-eval'");
   expect(sandbox.headers()['content-security-policy']).toContain("worker-src blob:");
   expect(sandbox.headers()['content-security-policy']).toContain("connect-src 'none'");
+  const extensionManifest = JSON.parse(await (await import('node:fs/promises')).readFile('.output/chrome-mv3/manifest.json', 'utf8'));
+  expect(extensionManifest.sandbox.pages).toEqual(['sandbox.html']);
+  expect(extensionManifest.content_security_policy.sandbox).toContain("connect-src 'none'");
   await page.goto('/demo');
   await page.getByLabel('JavaScript').fill('console.log("sandbox works")');
   await page.getByRole('button', { name: /Run check/ }).click();
@@ -125,8 +128,19 @@ test('@claim:extension-download downloads the packaged Chrome extension', async 
 
 test('@claim:manifest-export builds and downloads valid manifest JSON', async ({ page }) => {
   await page.goto('/');
-  await page.evaluate(() => localStorage.setItem('sb_license_cache:video-code-exit-tickets', JSON.stringify({ valid: true, checkedAt: Date.now() })));
-  await page.goto('/creator');
+  await page.route('https://api.sociobot.in/api/v1/products/video-code-exit-tickets/verify?license=existing-license-fixture', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ valid: true, reason: 'ok', expires_at: null })
+  }));
+  await page.getByRole('button', { name: 'Restore an existing license' }).click();
+  await page.getByLabel('License token').fill('existing-license-fixture');
+  const verification = page.waitForRequest(request => request.url() === 'https://api.sociobot.in/api/v1/products/video-code-exit-tickets/verify?license=existing-license-fixture');
+  await page.getByRole('button', { name: 'Verify license' }).click();
+  await verification;
+  await expect(page.getByText('License verified. The manifest builder is ready.')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Open manifest builder/ })).toBeVisible();
+  await page.getByRole('link', { name: /Open manifest builder/ }).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download manifest JSON' }).click();
   const download = await downloadPromise;
@@ -138,6 +152,24 @@ test('@claim:manifest-export builds and downloads valid manifest JSON', async ({
   expect(manifest.version).toBe(1);
   expect(manifest.checkpoints[0].template).toBe('javascript-console-v1');
   expect(manifest.checkpoints[0].expectedOutput).toBe('6, 10, 14');
+});
+
+test('@claim:creator-sales-paused does not advertise the unavailable Creator Kit checkout', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('a[href*="/checkout"]')).toHaveCount(0);
+  await expect(page.getByText('Creator Kit sales are paused.')).toBeVisible();
+  await expect(page.getByText(/Buy Creator Kit|\$29/)).toHaveCount(0);
+});
+
+test('known app routes deep-link while unknown paths return an HTTP 404', async ({ request }) => {
+  for (const path of ['/demo', '/creator', '/privacy', '/terms']) {
+    const response = await request.get(path);
+    expect(response.status(), path).toBe(200);
+    expect(await response.text(), path).toContain('<div id="app"></div>');
+  }
+  const missing = await request.get('/missing-page');
+  expect(missing.status()).toBe(404);
+  expect(await missing.text()).toContain('<h1>This run path ends here</h1>');
 });
 
 test('all routes have one h1, a main landmark, and no serious axe findings', async ({ page }) => {

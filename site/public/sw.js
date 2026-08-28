@@ -1,4 +1,4 @@
-const CACHE = 'run-before-next-v1';
+const CACHE = 'run-before-next-v2';
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(['/','/demo','/privacy','/terms','/favicon.svg','/assets/checkpoint-landscape-mobile.webp']))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))));
 self.addEventListener('fetch', event => {
