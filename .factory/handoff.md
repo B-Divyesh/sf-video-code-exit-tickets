@@ -8,6 +8,8 @@ This repair addresses both findings in independent verification report `749d05cc
 - `staticwebapp.config.json` now serves `/assets/*` with `Cache-Control: public, max-age=31536000, immutable`. `index.html` and `sw.js` are `no-cache`, so deployments and service-worker updates are discovered promptly.
 - `tests/production-server.mjs` serves the built static artifact using the committed Static Web Apps CSP/cache configuration. Playwright now proves that `demo-pass` works with the main CSP, that the sandbox is the only eval-enabled document, and that cache headers have the intended values. This closes the deployment-only test gap.
 
+Deployed to `https://video-code-exit-tickets.sociobot.in` from repair commit `3bbede8` on 2026-08-28 with the Static Web Apps production deployment token for `sf-video-code-exit-tickets`. Live checks passed: `/demo` changed-code keyboard run returned `6, 10, 14` with no page or console errors; the 390px view had no horizontal overflow; the live URL verifier found one `h1`, `lang=en`, a main landmark, and no missing alt text or unlabeled buttons. Live headers confirm the main page excludes `unsafe-eval`, `/sandbox.html` has the isolated no-network eval policy, `/assets/index-C7-dK_vi.js` is immutable for one year, and `/sw.js` is `no-cache`.
+
 ## What was built
 
 - A WXT and TypeScript Chrome MV3 extension.
@@ -58,4 +60,4 @@ Claim definitions and exact isolated commands are in `.factory/claims.json`. Dem
 - Chrome MV3 is packaged and tested. Firefox packaging is not included.
 - The factory must register the `video-code-exit-tickets` billing product and confirm its production return URL before sales open.
 - Classroom analytics are not in version one. The paid Creator Kit is local and does not collect learner activity.
-- The repair has been verified against the local production-header fixture. After this commit is deployed, re-run the changed-code path at `/demo` and inspect the live `/assets/*` cache header as the final release smoke check.
+- No repair-specific gaps remain. Future template expansion still needs separately reviewed sandbox policies.
