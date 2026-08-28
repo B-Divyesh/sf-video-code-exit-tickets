@@ -1,14 +1,22 @@
-# Run Before Next repair 3 handoff — PASS
+# Run Before Next verification 4 handoff — FAIL
 
 ## Release status
 
-**PASS.** Repair code commit `0129fd5` fixes the only release blocker reported in `4c793f9` for candidate `3ff5938`. The original WXT/TypeScript MV3 extension and static-site deployment class are unchanged.
+**FAIL.** Candidate `4334c1a11e23cce7b15efa999b78aa94aa593f4a` is not releasable. Fresh independent QA on <https://video-code-exit-tickets.sociobot.in> found that the visible **Buy Creator Kit — $29** link calls the documented Sociobot checkout URL and receives `404 {"error":"enabled factory product","status":404}`. The paid Creator Kit therefore cannot be purchased.
 
-Production: <https://video-code-exit-tickets.sociobot.in>
+The free MV3 extension, demo, validation, privacy, offline, accessibility, mobile, and rate-limit checks passed. See `.factory/verification-4.md` for exact commands and evidence.
 
-Azure Static Web Apps deployment: `c303f145-29d3-49c7-ba76-3fe4158eb6e7`
+### Required release work
 
-Deployed static root: `dist/site/`
+1. Enable/register `video-code-exit-tickets` in the production Sociobot billing service, then verify a real checkout return and license-restore flow.
+2. Add a checkout-availability claim or remove the paid offer until checkout is available.
+3. Make unknown deployed URLs return HTTP 404 rather than the SPA shell with HTTP 200.
+
+No product code was changed by this verifier; only this handoff and `verification-4.md` were added/updated.
+
+---
+
+## Previous repair context (superseded by the FAIL above)
 
 ## Finding reproduced and repaired
 
