@@ -364,6 +364,12 @@ test('@claim:demo-exit-isolation discards sample edits on every exit and cannot 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Prove your code before the video continues');
   await page.goForward();
   await expectFreshSample();
+  const restoredPrivacyLink = page.locator('[data-focus-key="nav-privacy"]');
+  await expect(restoredPrivacyLink).toBeFocused();
+  await expect.poll(async () => {
+    const box = await restoredPrivacyLink.boundingBox();
+    return Boolean(box && box.y >= 0 && box.y + box.height <= 720);
+  }).toBe(true);
 
   const extensionPath = resolve('.output/chrome-mv3');
   let extensionContext: BrowserContext | undefined;

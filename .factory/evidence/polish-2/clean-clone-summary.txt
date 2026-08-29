@@ -1,0 +1,33 @@
+Clean-clone claim verification
+Date: 2026-08-29 UTC
+Source commit: 9ffd333
+Clone: /tmp/rbn-polish2-clean-5s2sPU (ephemeral worker path)
+
+npm ci: PASS (214 packages; 0 vulnerabilities)
+
+Every exact command from .factory/claims.json was run independently and passed:
+demo-pass
+privacy-demo
+demo-exit-isolation
+timeout-recovery
+extension-download
+manifest-export
+creator-sales-paused
+sandbox-isolation
+extension-flow
+source-not-saved
+template-allowlist
+checkpoint-sorting
+video-pause-gate
+video-local-only
+sandbox-no-extension-apis
+license-check-cadence
+site-local-assets
+no-manifest-inert
+sample-manifest-download
+unique-checkpoint-ids
+offline-reload
+manifest-round-trip
+manifest-import-recovery
+
+Result: 23/23 exact claim commands passed.

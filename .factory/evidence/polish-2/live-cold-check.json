@@ -1,0 +1,34 @@
+{
+  "origin": "https://video-code-exit-tickets.sociobot.in",
+  "checkedAt": "2026-08-29T01:52:24Z",
+  "routes": {
+    "/": { "status": 200, "title": "Run Before Next — Code checks for video lessons", "metadata": true },
+    "/demo": { "status": 200, "title": "Demo — Run Before Next", "metadata": true },
+    "/creator": { "status": 200, "title": "Checkpoint file builder — Run Before Next", "metadata": true },
+    "/privacy": { "status": 200, "title": "Privacy — Run Before Next", "metadata": true },
+    "/terms": { "status": 200, "title": "Terms — Run Before Next", "metadata": true },
+    "/missing-page": { "status": 404, "title": "Page not found — Run Before Next", "metadata": true, "noindex": true }
+  },
+  "accessibility": {
+    "routesChecked": ["/", "/demo", "/creator", "/privacy", "/terms", "/missing-page"],
+    "seriousOrCriticalAxeViolations": 0,
+    "oneH1AndMainPerRoute": true
+  },
+  "mobile": { "viewport": "390x844", "firstScreenComplete": true, "horizontalOverflow": false },
+  "demo": {
+    "sampleOutput": "6, 10, 14",
+    "startForRealResets": true,
+    "wordmarkExitResets": true,
+    "privacyAndBackReset": true,
+    "backAndForwardReset": true,
+    "localStorageKeys": [],
+    "sessionStorageKeys": [],
+    "indexedDBDatabases": [],
+    "sameOriginRequestsOnly": true,
+    "offlineReload": true
+  },
+  "focus": { "newRouteFocusesHeading": true, "historyRestoresVisibleInvoker": true },
+  "extensionIsolation": { "seededPrivateMarkerRenderedInDemo": false, "extensionStorageUnchangedAfterDemoPassAndReset": true },
+  "headers": { "cspFrameAncestorsNone": true, "cspObjectSrcNone": true, "nosniff": true },
+  "consoleErrors": []
+}

@@ -18,6 +18,7 @@ type Route = 'home' | 'demo' | 'creator' | 'privacy' | 'terms' | 'not-found';
 type RenderMode = 'initial' | 'new' | 'history' | 'refresh';
 type HistoryState = { scrollY?: number; focusKey?: string };
 
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('popstate', (event) => render('history', event.state as HistoryState | null));
 document.addEventListener('click', (event) => {
   const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-route]');
@@ -68,9 +69,20 @@ function focusNewRoute() {
 
 function restoreHistoryPosition(state?: HistoryState | null) {
   requestAnimationFrame(() => {
-    window.scrollTo(0, state?.scrollY || 0);
-    if (state?.focusKey) document.querySelector<HTMLElement>(`[data-focus-key="${CSS.escape(state.focusKey)}"]`)?.focus({ preventScroll: true });
-    announceRoute(document.querySelector('h1')?.textContent || 'Page changed');
+    requestAnimationFrame(() => {
+      window.scrollTo(0, state?.scrollY || 0);
+      const savedTarget = state?.focusKey
+        ? document.querySelector<HTMLElement>(`[data-focus-key="${CSS.escape(state.focusKey)}"]`)
+        : null;
+      const focusTarget = savedTarget || document.querySelector<HTMLHeadingElement>('h1');
+      if (focusTarget instanceof HTMLHeadingElement) focusTarget.setAttribute('tabindex', '-1');
+      focusTarget?.focus({ preventScroll: true });
+      if (focusTarget) {
+        const bounds = focusTarget.getBoundingClientRect();
+        if (bounds.top < 0 || bounds.bottom > window.innerHeight) focusTarget.scrollIntoView({ block: 'center', behavior: 'auto' });
+      }
+      announceRoute(document.querySelector('h1')?.textContent || 'Page changed');
+    });
   });
 }
 

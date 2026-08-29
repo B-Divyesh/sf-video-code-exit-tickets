@@ -81,4 +81,4 @@ Audited 2026-08-29 after adversarial review 1. Counts treat contractions, hyphen
 | Existing author feature set | Creator Kit |
 | Purchased access token | license |
 
-Catalog description: “Pause author-prepared programming videos until changed code passes.” (8 words, 65 characters)
+Catalog description: “Pause author-prepared programming videos until changed code passes.” (8 words, 67 characters)

@@ -1,99 +1,51 @@
-# Run Before Next — review 2 handoff
+# Run Before Next — polish round 2 handoff
 
-Work order: `video-code-exit-tickets-review-2`
-
-Role: reviewer
-Production: <https://video-code-exit-tickets.sociobot.in>
-
-## Review 2 result
-
-**FAIL.** No product code was changed. `.factory/review-2.md` records one major finding: the public promise that demo edits disappear on every exit and do not read real extension data has no matching `claims.json` entry and tagged claim test.
-
-## What was checked
-
-- Cold live first-read at 390 × 844 and 1440 × 900.
-- Direct demo pass, reset, exit/re-entry, request log, and browser storage.
-- Live routing, metadata, 404, headers, links, accessibility, mobile layout, and visual identity.
-- Every earlier `F-1-*` finding against code and live behavior.
-- A fresh clone: `npm ci`, all 22 exact claims commands, `npm test` (23/23), `npm run check`, and `npm run build`.
-
-## Next step
-
-Add and test the proposed `demo-exit-isolation` claim in F-2-1, or remove the unsupported privacy sentence. Then repeat the clean claim run and review.
-
----
-
-# Run Before Next — polish round 1 handoff
-
-Work order: `video-code-exit-tickets-polish-1`
+Work order: `video-code-exit-tickets-polish-2`
 
 Production: <https://video-code-exit-tickets.sociobot.in>
 
-Release source: `39924482a8324e64953a10a09c89349c9d02bd09`; subsequent commits contain evidence and documentation only.
+Repair commit: `9ffd333` (pushed to `origin/main`)
 
-## What changed
+Deployment: Azure Static Web Apps `2321f600-aac3-4ed0-be61-ce005e3db5ea`
 
-- Resolved all 28 findings in `.factory/review-1.md`; there were no earlier review or polish reports in the repository.
-- Rewrote the first screen to state the author-prepared checkpoint-file requirement before download.
-- Added the direct, isolated `/?demo=1` sample entry, persistent demo banner, reset action, and reset-on-every-exit behavior.
-- Replaced the synthetic core-flow test with a real 50-second media fixture that crosses the 47-second checkpoint.
-- Added a complete local checkpoint-file builder: JSON import, linked validation errors, recovery, multi-checkpoint editing, add/remove/reorder, and export.
-- Added route-specific static metadata, real route documents, history focus restoration, a styled HTTP 404, complete legal/navigation chrome, and mobile-specific layout fixes.
-- Explained Chrome's all-sites permission and made pages without checkpoint files inert.
-- Registered 22 claims in `.factory/claims.json`, with exactly one matching claim tag per ID.
-- Applied every required copy rewrite and recorded the exhaustive word-count audit in `.factory/copy-audit.md`.
-- Kept the luminous mineral/glass visual system and documented the polish decisions in `.factory/design.md`.
-- Updated Vite, Vitest, and WXT to audited releases and made ZIP selection deterministic when older packages remain in `.output`.
-- Updated `.factory/catalog-description.txt` to: “Prove code changes before author-prepared video lessons continue.”
+## Outcome
 
-The finding-by-finding change and evidence map is in `.factory/polish-1.md`.
+All findings in `.factory/review-1.md` and `.factory/review-2.md` are resolved. Round 2 closes F-2-1 by registering and proving demo exit/isolation behavior instead of relying on an untagged regression test.
 
-## Verification
+The new `demo-exit-isolation` claim test:
 
-### Clean clone
+- passes the realistic arrays sample;
+- leaves through Start for real, the wordmark, Privacy plus Back, and Back/Forward;
+- checks starter code, “Not passed,” and initial output after every return;
+- runs the live demo in an unpacked-extension profile with seeded private extension data;
+- proves the private marker is not rendered and extension storage is unchanged after demo pass/reset.
 
-The final pushed repair was cloned into a new temporary directory. From that clone:
+The earlier first-screen, one-click demo, author compatibility wording, timestamp gate, install path, permission disclosure, real routes and metadata, focus restoration, styled 404, legal links, mobile layout, copy rewrites, offline behavior, and multi-checkpoint builder fixes remain present and passed again. The luminous mineral/glass identity and browser-extension/static-site artifact class are unchanged.
 
-- All 22 exact commands from `.factory/claims.json`: passed independently.
+The catalog description is now: “Pause author-prepared programming videos until changed code passes.” It is verb-first and 67 characters.
+
+## Exact verification evidence
+
+- Fresh clean clone of `9ffd333`: `npm ci` passed with zero vulnerabilities; all 23 exact claim commands from `.factory/claims.json` passed independently. Summary: `.factory/evidence/polish-2/clean-clone-summary.txt`.
 - `npm run check`: passed.
 - `npm run test:unit`: 3/3 passed.
 - `npm test`: 23/23 passed.
-- `npm run build`: passed and produced `dist/site/` plus the Chrome MV3 ZIP.
-- `npm audit --audit-level=high`: zero vulnerabilities across production and development dependencies.
-- ZIP unpack and manifest inspection: passed; version 1.0.1 and expected MV3 files present.
-
-The claim-by-claim output is `.factory/evidence/polish-1/clean-clone-final.log`.
-
-### Accessibility, privacy, mobile, offline, and performance
-
-- Playwright Axe: zero serious or critical findings on `/`, `/demo`, `/creator`, `/privacy`, `/terms`, and the 404, including the licensed builder state.
-- Keyboard: skip link, controls, code-run shortcut, extension-dialog focus loop, SPA route focus, and history focus restoration passed.
-- Mobile: no horizontal overflow at 390 × 844; first-screen copy and primary action are above the fold; key targets are at least 44 px.
-- Privacy: demo storage remained empty; ordinary site flows made no third-party requests; no-manifest extension flow changed no page, storage, playback, or network destination.
-- Offline: the demo reloaded and remained usable after one online visit.
-- Local `verify-url.sh`: passed with no errors.
-- Local Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 20 ms.
+- `npm run build`: passed; `dist/site/` and `dist/site/downloads/run-before-next-chrome.zip` produced.
+- Exact work-order build `npm ci && npm test && npm run build:site`: passed before deployment.
+- `npm audit --audit-level=high`: zero vulnerabilities.
+- Playwright Axe: zero serious or critical issues on `/`, `/demo`, `/creator`, `/privacy`, `/terms`, and the 404.
+- Local `verify-url.sh`: no console errors; correct title, `lang`, h1, main, alt text, and button labels on home and `/?demo=1`.
+- Live `verify-url.sh`: the same checks passed. Reports: `.factory/evidence/polish-2/verify-live-home/verify.json` and `.factory/evidence/polish-2/verify-live-demo/verify.json`.
+- Mobile 390 × 844: complete first-screen message/action/fact, no horizontal overflow, 44px key controls, usable demo, creator, privacy, and 404 layouts.
+- Privacy: empty local/session/IndexedDB demo storage, same-origin demo requests, unchanged seeded extension storage, and inert no-manifest behavior.
+- Offline: the production demo reloaded after one online visit.
+- Local Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.4 s, CLS 0, TBT 40 ms.
 - Live Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.1 s, CLS 0, TBT 30 ms.
-- Initial site payload: 28.22 KB JavaScript (9.52 KB gzip) and 17.94 KB CSS (4.81 KB gzip), below the 200 KB and 50 KB budgets.
-- Chrome extension ZIP: 9.85 KB.
-
-Evidence is under `.factory/evidence/polish-1/`, including mobile, demo, install-guide, creator, 404, Lighthouse, and `verify-url.sh` artifacts.
-
-### Cold production re-check
-
-After deployment, a new browser context verified the public custom domain. The check covered:
-
-- required first-screen wording and layout;
-- direct `?demo=1` entry, pass, exit, and fresh re-entry;
-- per-route source metadata and HTTP 404/noindex behavior;
-- visible history focus restoration;
-- multi-checkpoint import, invalid-file recovery, editing, and export;
-- same-origin request privacy, empty demo storage, offline reload, and clean ordinary-route consoles;
-- internal-link crawl and Privacy/Terms links in every footer;
-- one `<h1>`, one `<main>`, and zero serious/critical Axe findings per route;
-- the live downloaded ZIP in a fresh extension profile, including no-manifest inactivity and automatic 47-second pause/pass/resume.
-
-`verify-url.sh` returned 200 with title, `lang`, one heading, one main landmark, labelled controls, alt text, and no errors.
+- Initial assets: JavaScript 28.56 kB raw / 9.64 kB gzip; CSS 17.94 kB raw / 4.81 kB gzip.
+- Live ZIP: 9,852 bytes, Manifest V3 version 1.0.1, and file-for-file identical to the built unpacked extension.
+- Live route crawl: `/`, `/demo`, `/creator`, `/privacy`, `/terms`, sample manifest, ZIP, robots, and sitemap returned 200; `/missing-page` returned the intended HTTP 404 with `noindex`.
+- Cold production detail: `.factory/evidence/polish-2/live-cold-check.json`.
+- Finding-by-finding evidence: `.factory/polish-2.md`.
 
 ## Run and verify
 
@@ -106,8 +58,8 @@ npm run build
 npm audit --audit-level=high
 ```
 
-The production site is deployed from `dist/site/`. The extension archive is `dist/site/downloads/run-before-next-chrome.zip`.
+Deploy `dist/site/` as the static root. The packaged extension is `dist/site/downloads/run-before-next-chrome.zip`.
 
 ## Known gaps
 
-Review 2 found `F-2-1`: demo-exit/isolation privacy copy is not covered by a matching registered claim and tagged test. Creator Kit sales remain intentionally paused as stated; existing licenses continue to work.
+None found. New Creator Kit sales remain intentionally paused as stated on the site; this is product policy, not unfinished work.
