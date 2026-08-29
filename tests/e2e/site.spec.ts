@@ -326,25 +326,73 @@ test('keyboard run, history, internal links, and console stay clean', async ({ p
   expect(errors).toEqual([]);
 });
 
-test('demo state is discarded through every SPA exit and history return', async ({ page }) => {
+test('@claim:demo-exit-isolation discards sample edits on every exit and cannot read extension data', async ({ page }) => {
   await page.goto('/?demo=1');
-  const editor = page.getByLabel('JavaScript');
-  const starter = await editor.inputValue();
-  await editor.fill(starter.replace('* 1', '* 2'));
-  await page.getByRole('button', { name: /Run check/ }).click();
-  await expect(page.locator('#demo-state')).toHaveText('Passed');
-  await page.getByRole('link', { name: 'Run Before Next home' }).click();
-  await page.getByRole('link', { name: 'Demo' }).first().click();
-  await expect(page.getByLabel('JavaScript')).toHaveValue(starter);
-  await expect(page.locator('#demo-state')).toHaveText('Not passed');
-  await expect(page.locator('#demo-output')).toContainText('Run the changed code to see its output.');
+  const starter = await page.getByLabel('JavaScript').inputValue();
+  const passSample = async () => {
+    const editor = page.getByLabel('JavaScript');
+    await editor.fill(starter.replace('* 1', '* 2'));
+    await page.getByRole('button', { name: /Run check/ }).click();
+    await expect(page.locator('#demo-state')).toHaveText('Passed');
+    await expect(page.locator('#demo-output')).toContainText('6, 10, 14');
+  };
+  const expectFreshSample = async () => {
+    await expect(page.getByLabel('JavaScript')).toHaveValue(starter);
+    await expect(page.locator('#demo-state')).toHaveText('Not passed');
+    await expect(page.locator('#demo-output')).toContainText('Run the changed code to see its output.');
+  };
+  const openDemo = async () => {
+    await page.getByRole('link', { name: 'Demo' }).first().click();
+    await expectFreshSample();
+  };
 
-  await page.getByLabel('JavaScript').fill(starter.replace('* 1', '* 2'));
-  await page.getByRole('button', { name: /Run check/ }).click();
+  await passSample();
+  await page.getByRole('link', { name: 'Start for real' }).click();
+  await openDemo();
+
+  await passSample();
+  await page.getByRole('link', { name: 'Run Before Next home' }).click();
+  await openDemo();
+
+  await passSample();
   await page.getByRole('link', { name: 'Privacy' }).first().click();
   await page.goBack();
-  await expect(page.getByLabel('JavaScript')).toHaveValue(starter);
-  await expect(page.locator('#demo-state')).toHaveText('Not passed');
+  await expectFreshSample();
+
+  await passSample();
+  await page.goBack();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Prove your code before the video continues');
+  await page.goForward();
+  await expectFreshSample();
+
+  const extensionPath = resolve('.output/chrome-mv3');
+  let extensionContext: BrowserContext | undefined;
+  try {
+    extensionContext = await chromium.launchPersistentContext('', {
+      channel: 'chromium',
+      headless: true,
+      args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`]
+    });
+    let [serviceWorker] = extensionContext.serviceWorkers();
+    if (!serviceWorker) serviceWorker = await extensionContext.waitForEvent('serviceworker');
+    const realExtensionData = {
+      'progress:https://private.example/lesson:Private lesson': ['private-checkpoint'],
+      'private-marker': 'real-extension-data-must-stay-isolated'
+    };
+    await serviceWorker.evaluate(data => chrome.storage.local.set(data), realExtensionData);
+    const extensionPage = await extensionContext.newPage();
+    await extensionPage.goto('http://127.0.0.1:4173/?demo=1');
+    await expect(extensionPage.locator('body')).not.toContainText(realExtensionData['private-marker']);
+    const extensionEditor = extensionPage.getByLabel('JavaScript');
+    await extensionEditor.fill((await extensionEditor.inputValue()).replace('* 1', '* 2'));
+    await extensionPage.getByRole('button', { name: /Run check/ }).click();
+    await expect(extensionPage.locator('#demo-state')).toHaveText('Passed');
+    await extensionPage.getByRole('button', { name: 'Reset demo' }).click();
+    await expect(extensionPage.locator('#demo-state')).toHaveText('Not passed');
+    expect(await serviceWorker.evaluate(() => chrome.storage.local.get(null))).toEqual(realExtensionData);
+  } finally {
+    await extensionContext?.close();
+  }
 });
 
 test('history restores visible scroll and invoking focus without moving focus to the h1', async ({ page }) => {

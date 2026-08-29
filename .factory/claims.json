@@ -14,6 +14,13 @@
     "sandbox": "fresh browser context; record requests and inspect local and session storage after passing"
   },
   {
+    "id": "demo-exit-isolation",
+    "claim": "Demo edits disappear on every exit, and the demo neither reads nor changes real extension data.",
+    "where": "demo banner, privacy page, and demo documentation",
+    "test": "npm test -- --grep @claim:demo-exit-isolation",
+    "sandbox": "fresh browser and unpacked-extension contexts; pass the sample, leave through every advertised route and browser history, then assert starter state and unchanged seeded extension storage"
+  },
+  {
     "id": "timeout-recovery",
     "claim": "Stops an endless demo program within 1.5 seconds and lets the learner run corrected code.",
     "where": "demo checkpoint and README",

@@ -1,1 +1,1 @@
-Prove code changes before author-prepared video lessons continue.
+Pause author-prepared programming videos until changed code passes.
