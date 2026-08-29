@@ -4,7 +4,7 @@ Work order: `video-code-exit-tickets-polish-1`
 
 Production: <https://video-code-exit-tickets.sociobot.in>
 
-Release source: `ff69e11` plus the documentation-only handoff commit that contains this file.
+Release source: `39924482a8324e64953a10a09c89349c9d02bd09`; the following handoff commit contains evidence only.
 
 ## What changed
 
@@ -37,7 +37,7 @@ The final pushed repair was cloned into a new temporary directory. From that clo
 - `npm audit --audit-level=high`: zero vulnerabilities across production and development dependencies.
 - ZIP unpack and manifest inspection: passed; version 1.0.1 and expected MV3 files present.
 
-The claim-by-claim output is `.factory/evidence/polish-1/clean-clone-claims.log`.
+The claim-by-claim output is `.factory/evidence/polish-1/clean-clone-final.log`.
 
 ### Accessibility, privacy, mobile, offline, and performance
 

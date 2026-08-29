@@ -1,0 +1,1359 @@
+clean_clone=/tmp/rbn-polish-final-IomdXa
+commit=39924482a8324e64953a10a09c89349c9d02bd09
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 214 packages, and audited 215 packages in 3s
+
+55 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+=== demo-pass: npm test -- --grep @claim:demo-pass ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 600 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 19 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 841 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 192ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:demo-pass
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:6:1 › @claim:demo-pass runs changed code and passes the one-click sample checkpoint (1.5s)
+
+  1 passed (5.2s)
+[WebServer] (node:20671) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20691) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20723) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:20735) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20735) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== privacy-demo: npm test -- --grep @claim:privacy-demo ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 569 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 673 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 189ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:privacy-demo
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:120:1 › @claim:privacy-demo keeps sample data out of storage and third-party requests (1.4s)
+
+  1 passed (4.9s)
+[WebServer] (node:20927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20946) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20979) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:20991) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20991) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== timeout-recovery: npm test -- --grep @claim:timeout-recovery ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 539 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 20 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 652 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 178ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:timeout-recovery
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:20:1 › @claim:timeout-recovery interrupts an endless demo run and lets the learner retry (3.7s)
+
+  1 passed (7.1s)
+[WebServer] (node:21177) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21197) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21230) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:21242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21242) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== extension-download: npm test -- --grep @claim:extension-download ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 570 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 18 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 683 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 190ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:extension-download
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:182:1 › @claim:extension-download downloads the packaged Chrome extension (661ms)
+
+  1 passed (5.1s)
+[WebServer] (node:21430) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21449) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21481) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:21493) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21493) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== manifest-export: npm test -- --grep @claim:manifest-export ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 550 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 660 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 202ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:manifest-export
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:194:1 › @claim:manifest-export builds and downloads valid manifest JSON (3.1s)
+
+  1 passed (7.5s)
+[WebServer] (node:21699) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21718) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:21766) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21766) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== creator-sales-paused: npm test -- --grep @claim:creator-sales-paused ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 540 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 23 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 651 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 191ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:creator-sales-paused
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:222:1 › @claim:creator-sales-paused does not advertise the unavailable Creator Kit checkout (531ms)
+
+  1 passed (4.0s)
+[WebServer] (node:21955) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21974) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22006) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:22018) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22018) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== sandbox-isolation: npm test -- --grep @claim:sandbox-isolation ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 552 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 661 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 182ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:sandbox-isolation
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:94:1 › @claim:sandbox-isolation production CSP keeps eval out of the app and confines it to the sandbox (1.6s)
+
+  1 passed (6.0s)
+[WebServer] (node:22205) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22225) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22258) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:22270) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22270) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== extension-flow: npm test -- --grep @claim:extension-flow ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 531 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 635 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 180ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:extension-flow
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.4s)
+
+  1 passed (9.8s)
+[WebServer] (node:22457) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:22520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== source-not-saved: npm test -- --grep @claim:source-not-saved ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 587 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 689 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 178ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:source-not-saved
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.6s)
+
+  1 passed (8.9s)
+[WebServer] (node:22808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:22862) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:22874) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22874) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== template-allowlist: npm run test:unit -- --testNamePattern @claim:template-allowlist ===
+
+> video-code-exit-tickets@1.0.1 test:unit
+> vitest run --testNamePattern @claim:template-allowlist
+
+
+ RUN  v3.2.7 /tmp/rbn-polish-final-IomdXa
+
+ ✓ tests/checkpoints.test.ts (3 tests | 2 skipped) 3ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 2 skipped (3)
+   Start at  01:03:55
+   Duration  523ms (transform 54ms, setup 0ms, collect 55ms, tests 3ms, environment 0ms, prepare 114ms)
+
+
+=== checkpoint-sorting: npm run test:unit -- --testNamePattern @claim:checkpoint-sorting ===
+
+> video-code-exit-tickets@1.0.1 test:unit
+> vitest run --testNamePattern @claim:checkpoint-sorting
+
+
+ RUN  v3.2.7 /tmp/rbn-polish-final-IomdXa
+
+ ✓ tests/checkpoints.test.ts (3 tests | 2 skipped) 3ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 2 skipped (3)
+   Start at  01:03:56
+   Duration  534ms (transform 53ms, setup 0ms, collect 52ms, tests 3ms, environment 0ms, prepare 116ms)
+
+
+=== video-pause-gate: npm test -- --grep @claim:video-pause-gate ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 535 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 12 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 638 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 186ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:video-pause-gate
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.4s)
+
+  1 passed (8.7s)
+[WebServer] (node:23395) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23414) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:23458) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23458) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== video-local-only: npm test -- --grep @claim:video-local-only ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 526 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 628 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 185ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:video-local-only
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.6s)
+
+  1 passed (9.0s)
+[WebServer] (node:23730) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23749) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23781) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:23793) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23793) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== sandbox-no-extension-apis: npm test -- --grep @claim:sandbox-no-extension-apis ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠸ [2/3] content[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 564 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 675 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 187ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:sandbox-no-extension-apis
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.5s)
+
+  1 passed (9.8s)
+[WebServer] (node:24085) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24137) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:24149) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:24149) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== license-check-cadence: npm test -- --grep @claim:license-check-cadence ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 547 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 20 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 653 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 200ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:license-check-cadence
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:157:1 › @claim:license-check-cadence verifies an uncached license once daily without blocking the free download (974ms)
+
+  1 passed (4.4s)
+[WebServer] (node:24420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24439) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24471) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:24483) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:24483) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== site-local-assets: npm test -- --grep @claim:site-local-assets ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 531 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 633 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 230ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:site-local-assets
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:147:1 › @claim:site-local-assets loads every public route without third-party assets, analytics, ads, or fonts (833ms)
+
+  1 passed (4.3s)
+[WebServer] (node:24672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24725) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:24737) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:24737) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== no-manifest-inert: npm test -- --grep @claim:no-manifest-inert ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 573 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 684 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 209ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:no-manifest-inert
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.5s)
+
+  1 passed (9.9s)
+[WebServer] (node:24924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24943) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24976) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:24988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:24988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== sample-manifest-download: npm test -- --grep @claim:sample-manifest-download ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 579 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 680 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 187ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:sample-manifest-download
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:366:1 › @claim:sample-manifest-download downloads and validates the documented sample manifest (507ms)
+
+  1 passed (4.9s)
+[WebServer] (node:25277) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:25344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== unique-checkpoint-ids: npm run test:unit -- --testNamePattern @claim:unique-checkpoint-ids ===
+
+> video-code-exit-tickets@1.0.1 test:unit
+> vitest run --testNamePattern @claim:unique-checkpoint-ids
+
+
+ RUN  v3.2.7 /tmp/rbn-polish-final-IomdXa
+
+ ✓ tests/checkpoints.test.ts (3 tests | 2 skipped) 3ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 2 skipped (3)
+   Start at  01:05:11
+   Duration  523ms (transform 97ms, setup 0ms, collect 52ms, tests 3ms, environment 0ms, prepare 106ms)
+
+
+=== offline-reload: npm test -- --grep @claim:offline-reload ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 537 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 13 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 639 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 184ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:offline-reload
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:300:1 › @claim:offline-reload demo reloads after the first visit while offline (674ms)
+
+  1 passed (4.1s)
+[WebServer] (node:25657) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25708) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:25720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25720) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== manifest-round-trip: npm test -- --grep @claim:manifest-round-trip ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 523 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 634 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 196ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:manifest-round-trip
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:379:1 › @claim:manifest-round-trip @claim:manifest-import-recovery imports, edits, reorders, and exports several checkpoints (2.7s)
+
+  1 passed (7.1s)
+[WebServer] (node:25909) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:25960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:25972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+=== manifest-import-recovery: npm test -- --grep @claim:manifest-import-recovery ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 534 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 12 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 633 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 189ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test --grep @claim:manifest-import-recovery
+
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/e2e/site.spec.ts:379:1 › @claim:manifest-round-trip @claim:manifest-import-recovery imports, edits, reorders, and exports several checkpoints (3.3s)
+
+  1 passed (7.8s)
+[WebServer] (node:26176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26195) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:26240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+=== npm run check ===
+
+> video-code-exit-tickets@1.0.1 check
+> tsc --noEmit
+
+=== npm run test:unit ===
+
+> video-code-exit-tickets@1.0.1 test:unit
+> vitest run
+
+
+ RUN  v3.2.7 /tmp/rbn-polish-final-IomdXa
+
+ ✓ tests/checkpoints.test.ts (3 tests) 4ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  01:05:44
+   Duration  511ms (transform 44ms, setup 0ms, collect 43ms, tests 4ms, environment 0ms, prepare 116ms)
+
+=== npm test ===
+
+> video-code-exit-tickets@1.0.1 pretest
+> npm run build
+
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 553 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 14 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 655 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 180ms
+
+> video-code-exit-tickets@1.0.1 test
+> playwright test
+
+[WebServer] (node:26605) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26625) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26657) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 23 tests using 1 worker
+
+(node:26669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/site.spec.ts:6:1 › @claim:demo-pass runs changed code and passes the one-click sample checkpoint (1.5s)
+  ✓   2 tests/e2e/site.spec.ts:20:1 › @claim:timeout-recovery interrupts an endless demo run and lets the learner retry (3.0s)
+  ✓   3 tests/e2e/site.spec.ts:62:1 › Reset code re-enables Run check after a passed demo checkpoint (1.7s)
+  ✓   4 tests/e2e/site.spec.ts:76:1 › a cancelled demo run cannot overwrite a later pass (3.5s)
+  ✓   5 tests/e2e/site.spec.ts:94:1 › @claim:sandbox-isolation production CSP keeps eval out of the app and confines it to the sandbox (1.4s)
+  ✓   6 tests/e2e/site.spec.ts:110:1 › production headers cache hashed assets immutably and keep update entry points fresh (459ms)
+  ✓   7 tests/e2e/site.spec.ts:120:1 › @claim:privacy-demo keeps sample data out of storage and third-party requests (1.3s)
+  ✓   8 tests/e2e/site.spec.ts:147:1 › @claim:site-local-assets loads every public route without third-party assets, analytics, ads, or fonts (753ms)
+  ✓   9 tests/e2e/site.spec.ts:157:1 › @claim:license-check-cadence verifies an uncached license once daily without blocking the free download (757ms)
+  ✓  10 tests/e2e/site.spec.ts:182:1 › @claim:extension-download downloads the packaged Chrome extension (532ms)
+  ✓  11 tests/e2e/site.spec.ts:194:1 › @claim:manifest-export builds and downloads valid manifest JSON (2.9s)
+  ✓  12 tests/e2e/site.spec.ts:222:1 › @claim:creator-sales-paused does not advertise the unavailable Creator Kit checkout (425ms)
+  ✓  13 tests/e2e/site.spec.ts:229:1 › known app routes deep-link while unknown paths return an HTTP 404 (48ms)
+  ✓  14 tests/e2e/site.spec.ts:256:1 › all routes have one h1, a main landmark, and no serious axe findings (4.3s)
+  ✓  15 tests/e2e/site.spec.ts:271:1 › mobile demo keeps the editor and actions visible at 390px (281ms)
+  ✓  16 tests/e2e/site.spec.ts:279:1 › the 390px first screen shows the job, audience, sample action, and 44px key targets (430ms)
+  ✓  17 tests/e2e/site.spec.ts:300:1 › @claim:offline-reload demo reloads after the first visit while offline (534ms)
+  ✓  18 tests/e2e/site.spec.ts:313:1 › keyboard run, history, internal links, and console stay clean (882ms)
+  ✓  19 tests/e2e/site.spec.ts:329:1 › demo state is discarded through every SPA exit and history return (2.3s)
+  ✓  20 tests/e2e/site.spec.ts:350:1 › history restores visible scroll and invoking focus without moving focus to the h1 (419ms)
+  ✓  21 tests/e2e/site.spec.ts:366:1 › @claim:sample-manifest-download downloads and validates the documented sample manifest (390ms)
+  ✓  22 tests/e2e/site.spec.ts:379:1 › @claim:manifest-round-trip @claim:manifest-import-recovery imports, edits, reorders, and exports several checkpoints (2.4s)
+  ✓  23 tests/e2e/site.spec.ts:420:1 › @claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video (5.3s)
+
+  23 passed (40.2s)
+=== npm run build ===
+
+> video-code-exit-tickets@1.0.1 build
+> npm run build:site
+
+
+> video-code-exit-tickets@1.0.1 build:site
+> wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/video-code-exit-tickets-$npm_package_version-chrome.zip dist/site/downloads/run-before-next-chrome.zip
+
+[log] 
+WXT 0.21.4
+[info] Building chrome-mv3 for production with Vite 6.4.3
+[?25l⠋ Preparing...[K⠋ [1/3] background[K⠙ [1/3] background[K⠙ [2/3] content[K⠹ [2/3] content[K⠹ [3/3] popup[K⠸ [3/3] popup[K[K[?25h[K[?25h[success] Built extension in 549 ms
+  ├─ .output/chrome-mv3/manifest.json               784 B   
+  ├─ .output/chrome-mv3/popup.html                  744 B   
+  ├─ .output/chrome-mv3/sandbox.html                167 B   
+  ├─ .output/chrome-mv3/background.js               631 B   
+  ├─ .output/chrome-mv3/chunks/popup-JIIUvQh0.js    1.64 kB 
+  ├─ .output/chrome-mv3/content-scripts/content.js  14.79 kB
+  ├─ .output/chrome-mv3/sandbox.js                  1.78 kB 
+  └─ .output/chrome-mv3/assets/popup-jKdGZNDo.css   1.11 kB 
+Σ Total size: 21.64 kB                            
+[info] Zipping extension...
+[success] Zipped extension in 15 ms
+  └─ .output/video-code-exit-tickets-1.0.1-chrome.zip  9.85 kB
+Σ Total size: 9.85 kB                                
+[success] Finished in 654 ms
+vite v6.4.3 building for production...
+transforming...
+✓ 6 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/index.html                  2.00 kB │ gzip: 0.66 kB
+../dist/site/assets/index-D88WgxsI.css  17.94 kB │ gzip: 4.81 kB
+../dist/site/assets/index-hDLVr4ci.js   28.22 kB │ gzip: 9.52 kB │ map: 52.09 kB
+✓ built in 198ms
+=== npm audit --audit-level=high ===
+found 0 vulnerabilities
+PASS ZIP unpack, MV3 manifest, version 1.0.1
+FINAL CLEAN CLONE PASS 39924482a8324e64953a10a09c89349c9d02bd09
