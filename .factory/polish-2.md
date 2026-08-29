@@ -45,9 +45,9 @@ All earlier fixes were inspected again in the current source, clean build, and c
 - Work-order build: `npm ci && npm test && npm run build:site` passed and produced `dist/site/` plus the 9,852-byte Chrome MV3 ZIP.
 - Accessibility: Playwright Axe reported zero serious or critical findings across all six routes. Keyboard, dialog trap, route focus, visible history focus, reduced motion, one h1, landmarks, labels, and 390px targets passed.
 - Privacy/offline: demo storage stayed empty, demo requests stayed same-origin, seeded extension storage stayed unchanged, no-manifest pages stayed inert, and the demo reloaded offline.
-- Performance: local Lighthouse scored 100 Performance, 100 Accessibility, 100 Best Practices, and 100 SEO; LCP 1.4 s, CLS 0, TBT 40 ms. Live scored 100/100/100/100; LCP 1.1 s, CLS 0, TBT 30 ms.
+- Performance: local Lighthouse scored 100 Performance, 100 Accessibility, 100 Best Practices, and 100 SEO; LCP 1.4 s, CLS 0, TBT 40 ms. Final live scored 100/100/100/100; LCP 1.1 s, CLS 0, TBT 20 ms.
 - Payloads: initial JavaScript 28.56 kB raw / 9.64 kB gzip; CSS 17.94 kB raw / 4.81 kB gzip; extension ZIP 9.85 kB.
-- Deployment: Azure Static Web Apps deployment `2321f600-aac3-4ed0-be61-ce005e3db5ea` succeeded. The custom domain returned HTTPS 200.
+- Deployment: final Azure Static Web Apps deployment `2de7b923-8053-421a-a45b-1784ccc2d2f6` succeeded. The custom domain returned HTTPS 200.
 - Cold production check: route status/metadata, 404/noindex, headers, all exits, extension isolation, mobile layout, focus, Axe, storage, same-origin requests, offline reload, legal links, console, ZIP, and internal artifacts passed.
 
 No finding from either review remains open.

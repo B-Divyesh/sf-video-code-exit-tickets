@@ -6,7 +6,7 @@ Production: <https://video-code-exit-tickets.sociobot.in>
 
 Deployed repair source: `b54a9f939d3709742e9854c9b59b791b6698e800`
 
-Deployment: Azure Static Web Apps `2321f600-aac3-4ed0-be61-ce005e3db5ea`
+Deployment: Azure Static Web Apps `2de7b923-8053-421a-a45b-1784ccc2d2f6`
 
 ## Outcome
 
@@ -40,7 +40,7 @@ The catalog description is now: “Pause author-prepared programming videos unti
 - Privacy: empty local/session/IndexedDB demo storage, same-origin demo requests, unchanged seeded extension storage, and inert no-manifest behavior.
 - Offline: the production demo reloaded after one online visit.
 - Local Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.4 s, CLS 0, TBT 40 ms.
-- Live Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.1 s, CLS 0, TBT 30 ms.
+- Final live Lighthouse: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 1.1 s, CLS 0, TBT 20 ms.
 - Initial assets: JavaScript 28.56 kB raw / 9.64 kB gzip; CSS 17.94 kB raw / 4.81 kB gzip.
 - Live ZIP: 9,852 bytes, Manifest V3 version 1.0.1, and file-for-file identical to the built unpacked extension.
 - Live route crawl: `/`, `/demo`, `/creator`, `/privacy`, `/terms`, sample manifest, ZIP, robots, and sitemap returned 200; `/missing-page` returned the intended HTTP 404 with `noindex`.
