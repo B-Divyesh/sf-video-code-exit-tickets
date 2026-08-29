@@ -1,3 +1,28 @@
+# Run Before Next — review 2 handoff
+
+Work order: `video-code-exit-tickets-review-2`
+
+Role: reviewer
+Production: <https://video-code-exit-tickets.sociobot.in>
+
+## Review 2 result
+
+**FAIL.** No product code was changed. `.factory/review-2.md` records one major finding: the public promise that demo edits disappear on every exit and do not read real extension data has no matching `claims.json` entry and tagged claim test.
+
+## What was checked
+
+- Cold live first-read at 390 × 844 and 1440 × 900.
+- Direct demo pass, reset, exit/re-entry, request log, and browser storage.
+- Live routing, metadata, 404, headers, links, accessibility, mobile layout, and visual identity.
+- Every earlier `F-1-*` finding against code and live behavior.
+- A fresh clone: `npm ci`, all 22 exact claims commands, `npm test` (23/23), `npm run check`, and `npm run build`.
+
+## Next step
+
+Add and test the proposed `demo-exit-isolation` claim in F-2-1, or remove the unsupported privacy sentence. Then repeat the clean claim run and review.
+
+---
+
 # Run Before Next — polish round 1 handoff
 
 Work order: `video-code-exit-tickets-polish-1`
@@ -85,4 +110,4 @@ The production site is deployed from `dist/site/`. The extension archive is `dis
 
 ## Known gaps
 
-None. Creator Kit sales remain intentionally paused as stated in the product; existing licenses continue to work.
+Review 2 found `F-2-1`: demo-exit/isolation privacy copy is not covered by a matching registered claim and tagged test. Creator Kit sales remain intentionally paused as stated; existing licenses continue to work.
