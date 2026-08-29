@@ -46,8 +46,8 @@ This repository contains no earlier `.factory/review-*.md` or `.factory/polish-*
 - Playwright Axe: zero serious or critical findings on every public route and the licensed creator state.
 - `verify-url.sh`: passed locally; report at `.factory/evidence/polish-1/verify-local/verify.json`.
 - Lighthouse mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 20 ms. Report: `.factory/evidence/polish-1/lighthouse-home.json`.
-- Initial site payload: 28.22 KB JavaScript (9.52 KB gzip), 17.94 KB CSS (4.81 KB gzip). Packaged extension: 10.14 KB.
+- Initial site payload: 28.22 KB JavaScript (9.52 KB gzip), 17.94 KB CSS (4.81 KB gzip). Packaged extension: 9.85 KB.
 
 ## Live verification
 
-The post-deployment cold check is recorded in `.factory/handoff.md` and the live evidence directory. It covers the first screen, demo reset, route metadata and 404 response, browser history focus, creator flow, install instructions, link crawl, console, accessibility, privacy, and the packaged ZIP.
+On 2026-08-29, a fresh Chromium context opened <https://video-code-exit-tickets.sociobot.in> after deployment. It passed the first-screen geometry, `?demo=1` pass/reset, request and storage privacy, route metadata, real 404 response, history focus, creator import/recovery/edit/export, offline reload, internal-link crawl, legal-link presence, and ordinary-route console checks. The downloaded live ZIP was unpacked into a fresh Chromium profile: a page without a checkpoint file stayed unchanged, and the video fixture crossed 47 seconds, paused automatically, passed, and resumed without a synthetic open message. Live Playwright Axe found zero serious or critical issues on all six routes. Live Lighthouse scored 100 Performance, 100 Accessibility, 100 Best Practices, and 100 SEO, with LCP 1.1 s, CLS 0, and TBT 30 ms. `verify-url.sh` returned no errors; reports are in `.factory/evidence/polish-1/verify-live/` and `.factory/evidence/polish-1/lighthouse-live.json`.
