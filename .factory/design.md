@@ -73,3 +73,7 @@ Prompt used:
 ## Provenance
 
 The hero artwork is generated specifically for this product with the Param Factory image deployment (`factory-image`) on 2026-08-28. It is original project artwork under the repository MIT license. Source PNG and prompt sidecar live in `assets/src/`; optimized WebP derivatives ship in the site. Hand-authored SVG marks and icons use simple product-specific geometry and contain no third-party assets.
+
+## Polish round 1 extension
+
+The install guide, multi-checkpoint editor, and 404 keep the existing mineral-glass instrument language. They use the same cut corner, etched line, lime action signal, cyan focus ring, and eight-pixel rhythm. Mobile drops the hero artwork so the compatibility rule and sample action stay visible before the first scroll. No new visual asset was introduced; the 50-second black video is a generated test fixture and never appears in the product interface.

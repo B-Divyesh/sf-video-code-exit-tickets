@@ -10,9 +10,9 @@ export default defineContentScript({
   matches: ['<all_urls>'],
   runAt: 'document_idle',
   main() {
-    document.documentElement.setAttribute('data-run-before-next', 'ready');
     const parsed = readManifest();
     if (!parsed) return;
+    document.documentElement.setAttribute('data-run-before-next', 'ready');
     if (!parsed.ok) {
       announcePageError(parsed.message);
       return;

@@ -1,12 +1,13 @@
 import { test, expect, chromium, type BrowserContext } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { resolve } from 'node:path';
+import { validateManifest } from '../../shared/checkpoints';
 
-test('@claim:demo-pass runs changed code and passes the sample checkpoint', async ({ page }) => {
+test('@claim:demo-pass runs changed code and passes the one-click sample checkpoint', async ({ page }) => {
   const main = await page.request.get('/demo');
   expect(main.headers()['content-security-policy']).toContain("script-src 'self'");
   expect(main.headers()['content-security-policy']).not.toContain("script-src 'self' 'unsafe-eval'");
-  await page.goto('/demo');
+  await page.goto('/?demo=1');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   const editor = page.getByLabel('JavaScript');
   await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
@@ -169,7 +170,7 @@ test('@claim:license-check-cadence verifies an uncached license once daily witho
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok' }) });
   });
   await page.goto('/');
-  await expect(page.getByRole('link', { name: 'Download extension' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Download extension ZIP' })).toBeVisible();
   await expect.poll(() => verificationRequests).toBe(1);
   releaseVerification!();
   await expect.poll(() => page.evaluate(() => Boolean(JSON.parse(localStorage.getItem('sb_license_cache:video-code-exit-tickets') || 'null')?.checkedAt))).toBe(true);
@@ -181,11 +182,13 @@ test('@claim:license-check-cadence verifies an uncached license once daily witho
 test('@claim:extension-download downloads the packaged Chrome extension', async ({ page }) => {
   await page.goto('/');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('link', { name: 'Download extension' }).click();
+  await page.getByRole('link', { name: 'Download extension ZIP' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe('run-before-next-chrome.zip');
   const path = await download.path();
   expect(path).toBeTruthy();
+  await expect(page.locator('#install-guide')).toBeFocused();
+  await expect(page.getByText('Open chrome://extensions and turn on Developer mode.')).toBeVisible();
 });
 
 test('@claim:manifest-export builds and downloads valid manifest JSON', async ({ page }) => {
@@ -200,11 +203,11 @@ test('@claim:manifest-export builds and downloads valid manifest JSON', async ({
   const verification = page.waitForRequest(request => request.url() === 'https://api.sociobot.in/api/v1/products/video-code-exit-tickets/verify?license=existing-license-fixture');
   await page.getByRole('button', { name: 'Verify license' }).click();
   await verification;
-  await expect(page.getByText('License verified. The manifest builder is ready.')).toBeVisible();
-  await expect(page.getByRole('link', { name: /Open manifest builder/ })).toBeVisible();
-  await page.getByRole('link', { name: /Open manifest builder/ }).click();
+  await expect(page.getByText('License verified. The checkpoint file builder is ready.')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Open checkpoint file builder/ })).toBeVisible();
+  await page.getByRole('link', { name: /Open checkpoint file builder/ }).click();
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download manifest JSON' }).click();
+  await page.getByRole('button', { name: 'Download checkpoint JSON' }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe('run-before-next.manifest.json');
   const stream = await download.createReadStream();
@@ -224,14 +227,30 @@ test('@claim:creator-sales-paused does not advertise the unavailable Creator Kit
 });
 
 test('known app routes deep-link while unknown paths return an HTTP 404', async ({ request }) => {
-  for (const path of ['/demo', '/creator', '/privacy', '/terms']) {
+  const routes = {
+    '/demo': ['Demo — Run Before Next', 'Try one isolated JavaScript checkpoint with sample lesson data. Demo changes are not saved.'],
+    '/creator': ['Checkpoint file builder — Run Before Next', 'Import, validate, edit, reorder, and export lesson checkpoint files in your browser.'],
+    '/privacy': ['Privacy — Run Before Next', 'Learn what the Run Before Next extension checks, stores, and sends.'],
+    '/terms': ['Terms — Run Before Next', 'Read the terms for using Run Before Next with lesson pages and checkpoint files.']
+  } as const;
+  for (const [path, [title, description]] of Object.entries(routes)) {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
-    expect(await response.text(), path).toContain('<div id="app"></div>');
+    const html = await response.text();
+    expect(html, path).toContain('<div id="app"></div>');
+    expect(html, path).toContain(`rel="canonical" href="https://video-code-exit-tickets.sociobot.in${path}"`);
+    expect(html, path).toContain(`<title>${title}</title>`);
+    expect(html, path).toContain(`name="description" content="${description}"`);
+    expect(html, path).toContain(`property="og:title" content="${title}"`);
+    expect(html, path).toContain(`property="og:description" content="${description}"`);
+    expect(html, path).toContain(`name="twitter:title" content="${title}"`);
+    expect(html, path).toContain('rel="apple-touch-icon"');
   }
   const missing = await request.get('/missing-page');
   expect(missing.status()).toBe(404);
-  expect(await missing.text()).toContain('<h1>This run path ends here</h1>');
+  const missingHtml = await missing.text();
+  expect(missingHtml).toContain('<title>Page not found — Run Before Next</title>');
+  expect(missingHtml).toContain('name="robots" content="noindex"');
 });
 
 test('all routes have one h1, a main landmark, and no serious axe findings', async ({ page }) => {
@@ -239,9 +258,14 @@ test('all routes have one h1, a main landmark, and no serious axe findings', asy
     await page.goto(path);
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
+    await expect(page.getByRole('link', { name: 'Download extension ZIP' })).toBeVisible();
     const results = await new AxeBuilder({ page: page as never }).analyze();
     expect(results.violations.filter(item => ['serious', 'critical'].includes(item.impact || ''))).toEqual([]);
   }
+  await page.goto('/missing-page');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
+  await expect(page.getByRole('link', { name: 'Try the sample checkpoint' })).toBeVisible();
+  await expect(page.getByText('Built by Param Factory ↗')).toBeVisible();
 });
 
 test('mobile demo keeps the editor and actions visible at 390px', async ({ page }) => {
@@ -257,21 +281,23 @@ test('the 390px first screen shows the job, audience, sample action, and 44px ke
   await page.goto('/');
   for (const text of [
     'Prove your code before the video continues',
-    'For video learners who need to change and run each idea before moving on.',
-    'Try it with sample data'
+    'For learners using programming lessons whose author added Run Before Next code checks.',
+    'Try the sample checkpoint',
+    'Works on lessons with an author-provided checkpoint file.'
   ]) {
     const box = await page.getByText(text, { exact: true }).boundingBox();
     expect(box?.y, text).toBeGreaterThanOrEqual(0);
     expect((box?.y || 0) + (box?.height || 0), text).toBeLessThanOrEqual(844);
   }
-  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await page.getByRole('link', { name: 'Try the sample checkpoint' }).first().click();
+  expect(new URL(page.url()).searchParams.get('demo')).toBe('1');
   for (const target of [page.getByRole('button', { name: 'Reset demo' }), page.getByRole('link', { name: 'Start for real' }), page.getByRole('link', { name: 'Run Before Next home' })]) {
     const box = await target.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
   }
 });
 
-test('demo reloads after the first visit while offline', async ({ page, context }) => {
+test('@claim:offline-reload demo reloads after the first visit while offline', async ({ page, context }) => {
   await page.goto('/demo');
   await page.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
@@ -290,7 +316,7 @@ test('keyboard run, history, internal links, and console stay clean', async ({ p
   await page.goto('/');
   const internal = await page.locator('a[href]').evaluateAll(links => [...new Set(links.map(link => (link as HTMLAnchorElement).href).filter(href => new URL(href).origin === location.origin).map(href => new URL(href).pathname))]);
   for (const path of internal) expect((await request.get(path)).status(), path).toBeLessThan(400);
-  await page.getByRole('link', { name: 'Demo' }).click();
+  await page.getByRole('link', { name: 'Demo' }).first().click();
   const editor = page.getByLabel('JavaScript');
   await editor.fill((await editor.inputValue()).replace('* 1', '* 2'));
   await editor.press(process.platform === 'darwin' ? 'Meta+Enter' : 'Control+Enter');
@@ -300,7 +326,98 @@ test('keyboard run, history, internal links, and console stay clean', async ({ p
   expect(errors).toEqual([]);
 });
 
-test('@claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only extension enforces the checkpoint on a playable video and releases it after a passing run', async () => {
+test('demo state is discarded through every SPA exit and history return', async ({ page }) => {
+  await page.goto('/?demo=1');
+  const editor = page.getByLabel('JavaScript');
+  const starter = await editor.inputValue();
+  await editor.fill(starter.replace('* 1', '* 2'));
+  await page.getByRole('button', { name: /Run check/ }).click();
+  await expect(page.locator('#demo-state')).toHaveText('Passed');
+  await page.getByRole('link', { name: 'Run Before Next home' }).click();
+  await page.getByRole('link', { name: 'Demo' }).first().click();
+  await expect(page.getByLabel('JavaScript')).toHaveValue(starter);
+  await expect(page.locator('#demo-state')).toHaveText('Not passed');
+  await expect(page.locator('#demo-output')).toContainText('Run the changed code to see its output.');
+
+  await page.getByLabel('JavaScript').fill(starter.replace('* 1', '* 2'));
+  await page.getByRole('button', { name: /Run check/ }).click();
+  await page.getByRole('link', { name: 'Privacy' }).first().click();
+  await page.goBack();
+  await expect(page.getByLabel('JavaScript')).toHaveValue(starter);
+  await expect(page.locator('#demo-state')).toHaveText('Not passed');
+});
+
+test('history restores visible scroll and invoking focus without moving focus to the h1', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  const footerPrivacy = page.locator('[data-focus-key="footer-privacy"]');
+  await footerPrivacy.scrollIntoViewIfNeeded();
+  await footerPrivacy.click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+  await page.goBack();
+  await expect(footerPrivacy).toBeFocused();
+  const box = await footerPrivacy.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+});
+
+test('@claim:sample-manifest-download downloads and validates the documented sample manifest', async ({ page }) => {
+  await page.goto('/');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Download sample checkpoint file' }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  let body = '';
+  for await (const chunk of stream!) body += chunk.toString();
+  const checked = validateManifest(JSON.parse(body));
+  expect(checked.ok).toBe(true);
+  if (checked.ok) expect(checked.manifest).toMatchObject({ version: 1, title: 'JavaScript arrays: change before moving on', checkpoints: [{ id: 'double-prices', at: 47, expectedOutput: '6, 10, 14' }] });
+});
+
+test('@claim:manifest-round-trip @claim:manifest-import-recovery imports, edits, reorders, and exports several checkpoints', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('sb_license_cache:video-code-exit-tickets', JSON.stringify({ valid: true, checkedAt: Date.now() })));
+  await page.goto('/creator');
+  await page.getByLabel('Import checkpoint JSON').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{broken') });
+  await expect(page.locator('#import-status')).toContainText('could not be imported');
+  await expect(page.getByLabel('Import checkpoint JSON')).toHaveAttribute('aria-invalid', 'true');
+
+  const imported = {
+    version: 1,
+    title: 'Two JavaScript checks',
+    checkpoints: [
+      { id: 'first-check', at: 12, prompt: 'Print one.', template: 'javascript-console-v1', starterCode: 'console.log(0)', expectedOutput: '1' },
+      { id: 'second-check', at: 47, prompt: 'Print two.', template: 'javascript-console-v1', starterCode: 'console.log(1)', expectedOutput: '2' }
+    ]
+  };
+  await page.getByLabel('Import checkpoint JSON').setInputFiles({ name: 'two.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(imported)) });
+  await expect(page.locator('.checkpoint-fields')).toHaveCount(2);
+  const axe = await new AxeBuilder({ page: page as never }).analyze();
+  expect(axe.violations.filter(item => ['serious', 'critical'].includes(item.impact || ''))).toEqual([]);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.getByRole('button', { name: 'Move up' }).last().click();
+  await page.getByRole('button', { name: 'Move down' }).first().click();
+  await page.getByLabel('Learner prompt').nth(1).fill('Print two after editing.');
+  await page.getByRole('button', { name: 'Add checkpoint' }).click();
+  await expect(page.locator('.checkpoint-fields')).toHaveCount(3);
+  await page.getByRole('button', { name: 'Remove checkpoint' }).last().click();
+  await expect(page.locator('.checkpoint-fields')).toHaveCount(2);
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download checkpoint JSON' }).click();
+  const stream = await (await downloadPromise).createReadStream();
+  let body = '';
+  for await (const chunk of stream!) body += chunk.toString();
+  const exported = JSON.parse(body);
+  expect(exported.version).toBe(1);
+  expect(exported.title).toBe(imported.title);
+  expect(exported.checkpoints).toHaveLength(2);
+  expect(exported.checkpoints.map((item: { id: string }) => item.id).sort()).toEqual(['first-check', 'second-check']);
+  expect(exported.checkpoints.find((item: { id: string }) => item.id === 'second-check').prompt).toBe('Print two after editing.');
+});
+
+test('@claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @claim:sandbox-no-extension-apis @claim:video-local-only @claim:no-manifest-inert extension crosses the marked time and gates a playable video', async () => {
   const extensionPath = resolve('.output/chrome-mv3');
   let context: BrowserContext | undefined;
   try {
@@ -312,6 +429,32 @@ test('@claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @cla
     let [serviceWorker] = context.serviceWorkers();
     if (!serviceWorker) serviceWorker = await context.waitForEvent('serviceworker');
     expect(serviceWorker.url()).toContain('chrome-extension://');
+    const noManifestPage = await context.newPage();
+    const noManifestRequests: string[] = [];
+    noManifestPage.on('request', request => { if (request.url().startsWith('http')) noManifestRequests.push(request.url()); });
+    await noManifestPage.goto('http://127.0.0.1:4173/no-manifest-fixture.html');
+    const originalMarkup = await noManifestPage.locator('body').innerHTML();
+    await noManifestPage.waitForTimeout(300);
+    await noManifestPage.evaluate(async () => {
+      const video = document.querySelector<HTMLVideoElement>('video')!;
+      const canvas = document.createElement('canvas');
+      const drawing = canvas.getContext('2d')!;
+      const draw = () => { drawing.fillStyle = '#c9ff63'; drawing.fillRect(0, 0, 2, 2); requestAnimationFrame(draw); };
+      draw();
+      video.srcObject = canvas.captureStream(30); video.muted = true; await video.play();
+    });
+    const before = await noManifestPage.locator('video').evaluate(video => (video as HTMLVideoElement).currentTime);
+    await noManifestPage.waitForTimeout(250);
+    const after = await noManifestPage.locator('video').evaluate(video => ({ paused: (video as HTMLVideoElement).paused, time: (video as HTMLVideoElement).currentTime }));
+    expect(after.paused).toBe(false); expect(after.time).toBeGreaterThan(before);
+    await expect(noManifestPage.locator('#run-before-next-root')).toHaveCount(0);
+    expect(await noManifestPage.locator('body').innerHTML()).toBe(originalMarkup);
+    await expect(noManifestPage.locator('html')).not.toHaveAttribute('data-run-before-next', 'ready');
+    expect(await serviceWorker.evaluate(() => chrome.storage.local.get(null))).toEqual({});
+    expect(noManifestRequests.every(url => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
+    expect([...new Set(noManifestRequests.map(url => new URL(url).pathname))].sort()).toEqual(['/favicon.svg', '/no-manifest-fixture.html']);
+    await noManifestPage.close();
+
     const page = await context.newPage();
     const httpRequests: string[] = [];
     page.on('request', request => {
@@ -319,35 +462,23 @@ test('@claim:extension-flow @claim:source-not-saved @claim:video-pause-gate @cla
     });
     await page.goto('http://127.0.0.1:4173/extension-fixture.html');
     await expect(page.locator('html')).toHaveAttribute('data-run-before-next', 'ready');
-    await page.evaluate(async () => {
-      const video = document.querySelector<HTMLVideoElement>('video')!;
-      const canvas = document.createElement('canvas');
-      canvas.width = 2;
-      canvas.height = 2;
-      const context = canvas.getContext('2d')!;
-      const draw = () => {
-        context.fillStyle = `hsl(${performance.now() % 360} 80% 50%)`;
-        context.fillRect(0, 0, 2, 2);
-        requestAnimationFrame(draw);
-      };
-      draw();
-      video.srcObject = canvas.captureStream(30);
-      video.muted = true;
-      await video.play();
+    await page.locator('video').evaluate(async video => {
+      const media = video as HTMLVideoElement;
+      if (media.readyState < 1) await new Promise(resolve => media.addEventListener('loadedmetadata', resolve, { once: true }));
+      media.currentTime = 46.8;
+      await new Promise(resolve => media.addEventListener('seeked', resolve, { once: true }));
     });
-    await expect.poll(() => page.locator('video').evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThan(0.05);
-    await page.locator('video').evaluate(video => (video as HTMLVideoElement).pause());
     const status = await serviceWorker.evaluate(async () => {
       const [tab] = await chrome.tabs.query({ url: 'http://127.0.0.1:4173/extension-fixture.html' });
       return chrome.tabs.sendMessage(tab.id!, { type: 'RBN_STATUS' });
     });
     expect(status).toMatchObject({ active: true, passed: 0, total: 1, hasVideo: true });
     const host = page.locator('#run-before-next-root');
-    await serviceWorker.evaluate(async () => {
-      const [tab] = await chrome.tabs.query({ url: 'http://127.0.0.1:4173/extension-fixture.html' });
-      await chrome.tabs.sendMessage(tab.id!, { type: 'RBN_OPEN' });
-    });
+    await expect(host).toHaveCount(0);
+    await page.locator('video').evaluate(video => (video as HTMLVideoElement).play());
     await expect(host).toBeAttached();
+    await expect(page.locator('video')).toHaveJSProperty('paused', true);
+    expect(await page.locator('video').evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThanOrEqual(47);
     const editor = host.locator('textarea');
     await expect(page.locator('body')).toHaveJSProperty('inert', true);
     await editor.focus();

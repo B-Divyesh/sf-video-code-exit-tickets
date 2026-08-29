@@ -6,7 +6,7 @@ export default defineConfig({
   manifest: {
     name: 'Run Before Next',
     description: 'Pause video lessons for one runnable code check.',
-    version: '1.0.0',
+    version: '1.0.1',
     permissions: ['storage'],
     host_permissions: ['<all_urls>'],
     action: { default_title: 'Run Before Next' },

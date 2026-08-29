@@ -18,7 +18,7 @@ describe('checkpoint manifest validation', () => {
     if (!result.ok) expect(result.message).toContain('not allowed');
   });
 
-  it('rejects duplicate ids', () => {
+  it('@claim:unique-checkpoint-ids rejects duplicate IDs', () => {
     const input = structuredClone(SAMPLE_MANIFEST);
     input.checkpoints.push(structuredClone(input.checkpoints[0]));
     const result = validateManifest(input);

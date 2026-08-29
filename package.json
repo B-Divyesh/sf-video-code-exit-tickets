@@ -1,6 +1,6 @@
 {
   "name": "video-code-exit-tickets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "npm run build:site",
     "build:extension": "wxt build",
     "package:extension": "wxt zip",
-    "build:site": "wxt zip && vite build --config site/vite.config.ts && mkdir -p dist/site/downloads && cp .output/*-chrome.zip dist/site/downloads/run-before-next-chrome.zip",
+    "build:site": "wxt zip && vite build --config site/vite.config.ts && node scripts/generate-route-pages.mjs && mkdir -p dist/site/downloads && cp .output/*-chrome.zip dist/site/downloads/run-before-next-chrome.zip",
     "pretest": "npm run build",
     "test": "playwright test",
     "test:unit": "vitest run",

@@ -4,9 +4,19 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.primary{transition:none}.primary:hover{transform:none}}
 .demo-banner button{color:var(--lime-ink)}
 .editor-actions kbd{margin-left:8px}
+[hidden]{display:none!important}
+.download-requirement{color:var(--mist);font-size:14px;margin:16px 0 0;max-width:52ch}
+.install-guide{max-width:1100px;margin:0 auto 96px;padding:40px 48px;border:1px solid var(--cyan);border-radius:24px 3px 24px 24px;background:#0c211c;box-shadow:0 28px 80px #0006}
+.install-guide h2{font:800 clamp(30px,4vw,48px)/1 var(--display);margin:0 0 20px}.install-guide ol{padding-left:24px}.install-guide li{margin:10px 0}.install-guide>p:last-child{color:var(--mist);max-width:70ch}
+.import-panel{display:grid;gap:10px;margin:0 0 24px;padding:24px;border:1px solid var(--line);background:#0b1d19;border-radius:16px 2px 16px 16px}.import-panel label{font-weight:800}.import-panel input{min-height:48px}.import-panel p{margin:0;color:var(--mist)}
+.checkpoint-fields{display:grid;gap:16px;margin:0 0 24px;padding:24px;border:1px solid var(--line);border-radius:16px 2px 16px 16px}.checkpoint-fields legend{padding:0 8px;color:var(--lime);font:800 18px var(--display)}
+.checkpoint-actions{display:flex;flex-wrap:wrap;gap:8px}.checkpoint-actions button{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:99px;background:#163129;color:var(--paper);font-weight:750}.checkpoint-actions button:disabled{opacity:.45}
+.builder [aria-invalid="true"],.import-panel [aria-invalid="true"]{border-color:var(--danger);box-shadow:0 0 0 1px var(--danger)}
+.not-found-actions{display:flex;flex-wrap:wrap;gap:12px}.not-found>p{color:var(--mist);font-size:18px}
 
 /* The first mobile screen leads with the learner's action, then the artwork. */
 .wordmark{min-height:44px}
 .demo-banner button,.demo-banner a{min-height:44px;display:inline-flex;align-items:center}
 @media(max-width:900px){.hero-copy{grid-row:1;margin-top:0}.hero-art{grid-row:2}}
 @media(max-width:600px){.hero-copy{margin-top:0}.hero-art{margin:8px -48vw 0 -25vw}}
+@media(max-width:600px){.site-header{gap:10px;padding:10px 12px}.wordmark{font-size:14px}.wordmark-mark{width:28px;height:28px}.header-download{width:auto;max-width:152px;min-height:48px;padding:6px 10px;font-size:12px;line-height:1.15;text-align:center}.header-download:after{content:none}.hero{padding:20px 20px 56px}.hero h1{font-size:46px;line-height:.92;margin-bottom:18px}.lede{font-size:17px;line-height:1.4;margin-bottom:20px}.hero-action{gap:8px;margin-bottom:18px}.hero-action>span{max-width:none}.plain-facts{gap:4px}.download-requirement{margin-top:10px}.hero-art{display:none}.install-guide{margin:0 12px 72px;padding:26px 22px}.checkpoint-actions{display:grid;grid-template-columns:1fr 1fr}.checkpoint-actions button:last-child{grid-column:1/-1}.creator{padding:48px 16px 80px}}

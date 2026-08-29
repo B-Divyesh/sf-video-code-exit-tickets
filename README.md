@@ -1,20 +1,22 @@
 # Run Before Next
 
-Prove your code change before the video continues.
+Prove your code before the video continues.
 
-Run Before Next is a Chrome MV3 extension for people learning programming from video. An author adds a small JSON manifest to an existing lesson page. At each marked time, the extension pauses the page video and opens a runnable JavaScript checkpoint. The learner changes the starter code, matches the expected output, and resumes the lesson.
+Run Before Next is a Chrome extension for learners using author-prepared programming lessons. An author adds a checkpoint JSON block to a lesson page they control. At each marked time, the extension pauses the video and opens a runnable JavaScript checkpoint. The learner changes the starter code, matches the expected output, and resumes the lesson.
 
-[Try the sample with no setup](https://video-code-exit-tickets.sociobot.in/demo) or open `/demo` while developing.
+[Try the sample checkpoint](https://video-code-exit-tickets.sociobot.in/?demo=1) or open `/?demo=1` while developing. The canonical demo route is `/demo`.
 
 ## What ships
 
-- A WXT and TypeScript Chrome MV3 extension in `.output/chrome-mv3/`.
+- A Chrome extension built with TypeScript. Its unpacked files are in `.output/chrome-mv3/`.
 - A packaged extension at `dist/site/downloads/run-before-next-chrome.zip`.
 - A static landing site and live sandbox demo in `dist/site/`.
-- One allowlisted sandbox template: `javascript-console-v1`.
-- License restore and a manifest builder for existing Creator Kit users. New sales are paused.
+- One approved JavaScript console template: `javascript-console-v1`.
+- License restore and a multi-checkpoint file builder for existing Creator Kit users.
 
-The extension stores passed checkpoint ids and lesson page addresses. It does not store learner editor contents. The live demo records no sample edits in local or session storage.
+New Creator Kit sales are paused. WXT and Chrome Manifest V3 details are contributor concerns, not setup steps for lesson authors.
+
+The extension stores passed checkpoint IDs and lesson page addresses. It does not store learner editor contents. The live demo does not save sample edits.
 
 ## Run locally
 
@@ -35,14 +37,17 @@ The deployment command is exactly `npm run build`. Deploy `dist/site/` as the st
 ## Load the extension
 
 1. Run `npm run build`.
-2. Open `chrome://extensions`.
-3. Turn on Developer mode.
-4. Choose **Load unpacked** and select `.output/chrome-mv3`.
-5. Open a lesson page that includes the author manifest below.
+2. Unzip `dist/site/downloads/run-before-next-chrome.zip`.
+3. Open `chrome://extensions` in desktop Chrome.
+4. Turn on Developer mode.
+5. Choose **Load unpacked** and select the unzipped folder.
+6. Open a lesson page that includes the author checkpoint block below.
+
+The live download uses the same manual installation steps. It is not a Chrome Web Store install.
 
 ## Add checkpoints to a lesson
 
-Place an application JSON script in a page you control.
+Add this checkpoint JSON block to a lesson page you control.
 
 ```html
 <script type="application/json" data-run-before-next-manifest>
@@ -61,19 +66,25 @@ Place an application JSON script in a page you control.
 </script>
 ```
 
-Times are seconds from the start of the first page video. Checkpoint ids must be unique. The extension sorts checkpoints by time and rejects templates outside the allowlist.
+Times are seconds from the start of the first page video. Checkpoint IDs must be unique. The extension sorts checkpoints by time. It rejects templates other than `javascript-console-v1`.
+
+Existing Creator Kit users can import and edit version 1 checkpoint files. The builder adds, removes, reorders, validates, and exports multiple checkpoints locally.
 
 ## Privacy and security
 
-Learner code runs in the extension’s declared sandbox page. The sandbox has no extension APIs. A run stops within 1.5 seconds if it does not return. The extension neither scrapes nor redistributes video.
+Learner code runs in an isolated extension page with no extension access. A run stops within 1.5 seconds if it does not return. The extension neither scrapes nor redistributes video.
 
-Progress contains only page addresses and passed checkpoint ids. See `/privacy` and `/terms` on the built site.
+Chrome asks for access to all sites. This lets the extension look for an author-provided checkpoint file on each page. If it finds none, it stops without changing the page, storage, video, or network activity.
 
-Existing Creator Kit access uses the Sociobot billing API. The browser stores a supplied license under `sb_license:video-code-exit-tickets`, verifies it at most once daily, and never blocks the free extension while checking. New Creator Kit sales are paused.
+Progress contains only page addresses and passed checkpoint IDs. See `/privacy` and `/terms` on the built site.
+
+Existing Creator Kit access uses the Sociobot billing API. The browser stores the license under `sb_license:video-code-exit-tickets`. It checks the license at most once daily. The free extension remains available during checks.
 
 ## Tests and claims
 
-The test suite covers the live demo, request privacy, packaged download, paid manifest export, offline reload, mobile layout, accessibility, and an unpacked-extension run. Testable product claims and their exact commands are in `.factory/claims.json`.
+Tests cover the demo, same-origin requests, downloads, offline reload, mobile layout, and accessibility. They also run the unpacked extension through one checkpoint.
+
+Every public product claim and its exact command appears in `.factory/claims.json`.
 
 ## License
 
