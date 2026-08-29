@@ -1,7 +1,7 @@
 Clean-clone claim verification
 Date: 2026-08-29 UTC
-Source commit: 9ffd333
-Clone: /tmp/rbn-polish2-clean-5s2sPU (ephemeral worker path)
+Source commit: b54a9f939d3709742e9854c9b59b791b6698e800
+Clone: /tmp/rbn-polish2-final-jRSIZI (ephemeral worker path)
 
 npm ci: PASS (214 packages; 0 vulnerabilities)
 

@@ -4,7 +4,7 @@ Work order: `video-code-exit-tickets-polish-2`
 
 Production: <https://video-code-exit-tickets.sociobot.in>
 
-Repair commit: `9ffd333` (pushed to `origin/main`)
+Deployed repair source: `b54a9f939d3709742e9854c9b59b791b6698e800`
 
 Deployment: Azure Static Web Apps `2321f600-aac3-4ed0-be61-ce005e3db5ea`
 
@@ -26,7 +26,7 @@ The catalog description is now: “Pause author-prepared programming videos unti
 
 ## Exact verification evidence
 
-- Fresh clean clone of `9ffd333`: `npm ci` passed with zero vulnerabilities; all 23 exact claim commands from `.factory/claims.json` passed independently. Summary: `.factory/evidence/polish-2/clean-clone-summary.txt`.
+- Fresh clean clone of `b54a9f939d3709742e9854c9b59b791b6698e800`: `npm ci` passed with zero vulnerabilities; all 23 exact claim commands from `.factory/claims.json` passed independently. Summary: `.factory/evidence/polish-2/clean-clone-summary.txt`.
 - `npm run check`: passed.
 - `npm run test:unit`: 3/3 passed.
 - `npm test`: 23/23 passed.

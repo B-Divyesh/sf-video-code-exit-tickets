@@ -40,7 +40,7 @@ All earlier fixes were inspected again in the current source, clean build, and c
 
 ## Verification
 
-- Clean clone of `9ffd333`: `npm ci` and all 23 exact `.factory/claims.json` commands passed independently.
+- Clean clone of `b54a9f939d3709742e9854c9b59b791b6698e800`: `npm ci` and all 23 exact `.factory/claims.json` commands passed independently.
 - Local: `npm run check`, 3/3 unit tests, 23/23 Playwright tests, `npm run build`, and `npm audit --audit-level=high` passed.
 - Work-order build: `npm ci && npm test && npm run build:site` passed and produced `dist/site/` plus the 9,852-byte Chrome MV3 ZIP.
 - Accessibility: Playwright Axe reported zero serious or critical findings across all six routes. Keyboard, dialog trap, route focus, visible history focus, reduced motion, one h1, landmarks, labels, and 390px targets passed.
