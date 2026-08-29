@@ -406,18 +406,20 @@ test('@claim:demo-exit-isolation discards sample edits on every exit and cannot 
 
 test('history restores visible scroll and invoking focus without moving focus to the h1', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
-  const footerPrivacy = page.locator('[data-focus-key="footer-privacy"]');
-  await footerPrivacy.scrollIntoViewIfNeeded();
-  await footerPrivacy.click();
-  await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
-  await page.goBack();
-  await expect(footerPrivacy).toBeFocused();
-  const box = await footerPrivacy.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.y).toBeGreaterThanOrEqual(0);
-  expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto('/');
+    const footerPrivacy = page.locator('[data-focus-key="footer-privacy"]');
+    await footerPrivacy.scrollIntoViewIfNeeded();
+    await footerPrivacy.click();
+    await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+    await page.goBack();
+    await expect(footerPrivacy).toBeFocused();
+    const box = await footerPrivacy.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.y).toBeGreaterThanOrEqual(0);
+    expect(box!.y + box!.height).toBeLessThanOrEqual(844);
+  }
 });
 
 test('@claim:sample-manifest-download downloads and validates the documented sample manifest', async ({ page }) => {

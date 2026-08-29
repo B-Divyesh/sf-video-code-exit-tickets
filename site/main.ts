@@ -60,7 +60,7 @@ function render(mode: RenderMode = 'refresh', historyState?: HistoryState | null
 }
 
 function focusNewRoute() {
-  window.scrollTo(0, 0);
+  jumpTo(0);
   const h1 = document.querySelector<HTMLHeadingElement>('h1');
   h1?.setAttribute('tabindex', '-1');
   h1?.focus({ preventScroll: true });
@@ -70,7 +70,7 @@ function focusNewRoute() {
 function restoreHistoryPosition(state?: HistoryState | null) {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      window.scrollTo(0, state?.scrollY || 0);
+      jumpTo(state?.scrollY || 0);
       const savedTarget = state?.focusKey
         ? document.querySelector<HTMLElement>(`[data-focus-key="${CSS.escape(state.focusKey)}"]`)
         : null;
@@ -79,11 +79,20 @@ function restoreHistoryPosition(state?: HistoryState | null) {
       focusTarget?.focus({ preventScroll: true });
       if (focusTarget) {
         const bounds = focusTarget.getBoundingClientRect();
-        if (bounds.top < 0 || bounds.bottom > window.innerHeight) focusTarget.scrollIntoView({ block: 'center', behavior: 'auto' });
+        if (bounds.top < 0 || bounds.bottom > window.innerHeight) {
+          jumpTo(window.scrollY + bounds.top - (window.innerHeight - bounds.height) / 2);
+        }
       }
       announceRoute(document.querySelector('h1')?.textContent || 'Page changed');
     });
   });
+}
+
+function jumpTo(top: number) {
+  const previous = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = 'auto';
+  window.scrollTo(0, top);
+  document.documentElement.style.scrollBehavior = previous;
 }
 
 function announceRoute(message: string) {
