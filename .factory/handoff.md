@@ -4,7 +4,7 @@ Work order: `video-code-exit-tickets-polish-1`
 
 Production: <https://video-code-exit-tickets.sociobot.in>
 
-Release source: `39924482a8324e64953a10a09c89349c9d02bd09`; the following handoff commit contains evidence only.
+Release source: `39924482a8324e64953a10a09c89349c9d02bd09`; subsequent commits contain evidence and documentation only.
 
 ## What changed
 

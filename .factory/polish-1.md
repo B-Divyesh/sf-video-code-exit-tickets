@@ -15,8 +15,8 @@ This repository contains no earlier `.factory/review-*.md` or `.factory/polish-*
 | F-1-7 | History entries retain scroll and an invoking-element key. Popstate restores both; new route navigation still focuses the destination heading. | Playwright: `history restores visible scroll and invoking focus without moving focus to the h1`; live: home → Privacy → Back. |
 | F-1-8 | The styled 404 now uses the standard header, navigation, download action, product footer, attribution, build ID, and direct “Page not found” wording. | Playwright route/axe checks; screenshot: `.factory/evidence/polish-1/404.png`; live: `/missing-page`. |
 | F-1-9 | Registered and implemented a download-and-parse claim for the sample checkpoint file, including the arrays values and 47-second time. | Claim test: `@claim:sample-manifest-download`; live artifact: `/sample-manifest.json`. |
-| F-1-10 | Registered the uniqueness statement and tagged the existing duplicate-ID validation test. “IDs” is used consistently. | Unit claim test: `@claim:unique-checkpoint-ids`. |
-| F-1-11 | Registered the scoped offline statement and tagged the production service-worker reload test. | Claim test: `@claim:offline-reload`. |
+| F-1-10 | Registered the uniqueness statement and tagged the existing duplicate-ID validation test. “IDs” is used consistently. | Unit claim test: `@claim:unique-checkpoint-ids`; screenshot: `.factory/evidence/polish-1/creator-builder.png`; live builder check: `/creator`. |
+| F-1-11 | Registered the scoped offline statement and tagged the production service-worker reload test. | Claim test: `@claim:offline-reload`; screenshot: `.factory/evidence/polish-1/demo-mobile.png`; cold live offline reload: `/demo`. |
 | F-1-12 | The licensed builder now imports JSON, associates announced errors with the file control, recovers after invalid input, and adds, edits, removes, reorders, and exports multiple checkpoints locally. | Claim tests: `@claim:manifest-round-trip`, `@claim:manifest-import-recovery`, and `@claim:manifest-export`; screenshot: `.factory/evidence/polish-1/creator-builder.png`; live: `/creator`. |
 | F-1-13 | Replaced “A checkpoint layer for video” with “Code checks for video lessons.” | `.factory/copy-audit.md`; live: `/`. |
 | F-1-14 | Replaced “Core extension is free” with “The Chrome extension is free.” | First-screen Playwright test; screenshot: `.factory/evidence/polish-1/mobile-first-screen.png`; live: `/`. |
@@ -29,11 +29,11 @@ This repository contains no earlier `.factory/review-*.md` or `.factory/polish-*
 | F-1-21 | Replaced the vague heading with “The extension does not copy your video.” | `.factory/copy-audit.md`; live: `/`. |
 | F-1-22 | Replaced “No hidden templates” with “JavaScript console checks only.” | Claim test: `@claim:template-allowlist`; live: `/`. |
 | F-1-23 | Replaced the restore heading with “Existing customers can build checkpoint files.” | `.factory/copy-audit.md`; live: `/`. |
-| F-1-24 | README describes a TypeScript Chrome extension first and leaves WXT/MV3 to the contributor note. | README copy audit; repository `README.md`. |
-| F-1-25 | README now says “Add this checkpoint JSON block to a lesson page you control.” | README copy audit; repository `README.md`. |
-| F-1-26 | README now says learner code runs in an isolated extension page with no extension access. | Claim test: `@claim:sandbox-no-extension-apis`; repository `README.md`. |
-| F-1-27 | License storage, daily checking, and free-download availability are three short sentences. | Claim test: `@claim:license-check-cadence`; repository `README.md`. |
-| F-1-28 | The README test description is split into two plain sentences and names observable behavior. | `.factory/copy-audit.md`; clean-clone full suite: 23/23 passed. |
+| F-1-24 | README describes a TypeScript Chrome extension first and leaves WXT/MV3 to the contributor note. | README copy audit; repository `README.md`; screenshot/live URL: not applicable to repository-only wording. |
+| F-1-25 | README now says “Add this checkpoint JSON block to a lesson page you control.” | README copy audit; repository `README.md`; related screenshot: `.factory/evidence/polish-1/creator-builder.png`; live builder check: `/creator`. |
+| F-1-26 | README now says learner code runs in an isolated extension page with no extension access. | Claim test: `@claim:sandbox-no-extension-apis`; repository `README.md`; live downloaded-ZIP check: `/extension-fixture.html`. |
+| F-1-27 | License storage, daily checking, and free-download availability are three short sentences. | Claim test: `@claim:license-check-cadence`; repository `README.md`; live license/download check: `/`. |
+| F-1-28 | The README test description is split into two plain sentences and names observable behavior. | `.factory/copy-audit.md`; clean-clone full suite: 23/23 passed; screenshot/live URL: not applicable to repository-only wording. |
 
 ## Local verification
 
