@@ -276,14 +276,17 @@ test('mobile demo keeps the editor and actions visible at 390px', async ({ page 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test('the 390px first screen shows the job, audience, sample action, and 44px key targets', async ({ page }) => {
+test('the 390px first screen shows the job, audience, sample action, facts, and 44px key targets', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   for (const text of [
     'Prove your code before the video continues',
     'For learners using programming lessons whose author added Run Before Next code checks.',
     'Try the sample checkpoint',
-    'Works on lessons with an author-provided checkpoint file.'
+    'Works on lessons with an author-provided checkpoint file.',
+    'The sample reloads offline after one online visit.',
+    'Learner code is not saved.',
+    'The Chrome extension is free.'
   ]) {
     const box = await page.getByText(text, { exact: true }).boundingBox();
     expect(box?.y, text).toBeGreaterThanOrEqual(0);

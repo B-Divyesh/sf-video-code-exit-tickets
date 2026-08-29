@@ -1,6 +1,6 @@
 # Landing page copy audit
 
-Audited 2026-08-29 after adversarial review 1. Counts treat contractions, hyphenated terms, paths, and versions as one word. Code samples are excluded. No sentence exceeds 22 words. No copy uses the banned marketing words.
+Audited 2026-08-29 after adversarial review 3. Counts treat contractions, hyphenated terms, paths, and versions as one word. Code samples are excluded. No sentence exceeds 22 words. No copy uses the banned marketing words.
 
 | Location | Exact copy | Words | Flag |
 | --- | --- | ---: | --- |
@@ -18,7 +18,7 @@ Audited 2026-08-29 after adversarial review 1. Counts treat contractions, hyphen
 | Action note | Opens one JavaScript checkpoint. | 4 | None |
 | Action note | No setup. | 2 | None |
 | Fact | Works on lessons with an author-provided checkpoint file. | 8 | None |
-| Fact | No account. | 2 | None |
+| Fact | The sample reloads offline after one online visit. | 8 | None |
 | Fact | Learner code is not saved. | 5 | None |
 | Fact | The Chrome extension is free. | 5 | None |
 | Download note | Download for desktop Chrome. | 4 | None |
@@ -81,4 +81,4 @@ Audited 2026-08-29 after adversarial review 1. Counts treat contractions, hyphen
 | Existing author feature set | Creator Kit |
 | Purchased access token | license |
 
-Catalog description: “Pause author-prepared programming videos until changed code passes.” (8 words, 67 characters)
+Catalog description: “Prove a code change before an author-prepared programming video continues.” (10 words, 73 characters)
