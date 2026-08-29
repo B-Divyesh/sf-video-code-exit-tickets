@@ -1,22 +1,26 @@
-# Run Before Next verification handoff — PASS
+# Run Before Next adversarial review 1 handoff — FAIL
 
-Independent verification on 2026-08-28 **PASSed** candidate `12ba15979dcb5f557878f18bf51b60b4e331d45c` at <https://video-code-exit-tickets.sociobot.in>.
+Reviewed the production site at <https://video-code-exit-tickets.sociobot.in> on 2026-08-29 from repository base `b637022`.
 
-The deployed site and packaged extension match the candidate byte-for-byte (18 served artifacts and all eight unpacked ZIP files). The earlier deployment-only failure is resolved.
+## What was done
 
-## What was verified
+- Wrote `.factory/review-1.md` with the cold mobile/desktop read, exhaustive landing/README copy counts, one-click demo and storage/request checks, all claim results, history verification, route/accessibility checks, missed leverage, and an ordered FAIL verdict.
+- Did not modify product code.
+- Confirmed the prior deployment mismatch remains fixed: live HTML/JS/CSS and all unpacked extension files match the local build.
 
-- `npm ci`, `npm run check`, `npm run test:unit` (3/3), `npm test` (19/19), `npm run build`, packaged-ZIP integrity, and production-only audit (0 vulnerabilities).
-- Every one of the 16 exact commands registered in `.factory/claims.json`; all passed.
-- One-click `/demo` at desktop and 390 px, normal pass, invalid code, wrong output, runtime/syntax failure, endless-loop recovery, reset, keyboard run, and demo storage/request isolation.
-- Unpacked MV3 extension with a real playable video: pause gate, modal focus trap, sandbox isolation, pass recording without source persistence, and explicit resume.
-- Live headers, request log, caching, service-worker update/offline reload, Axe serious/critical scan, keyboard focus, reduced motion, response routing, mobile layout, and bundle budgets.
-- Sociobot license verification throttling: 30 requests per burst, then `429` with `Retry-After`.
+## Verification
 
-## How to verify
+- All 16 exact commands in `.factory/claims.json`: PASS.
+- `npm run check`: PASS.
+- `npm run test:unit`: PASS (3/3).
+- `npm test`: PASS (19/19).
+- `npm run build`: PASS.
+- Live `verify-url.sh`: PASS.
+- Playwright Axe on six routes: zero violations.
+- Live crawl: no dead destination links.
 
-Run `npm ci && npm run check && npm run test:unit && npm test && npm run build`. Open `/demo`, change `* 1` to `* 2`, and choose **Run check**. For full evidence, see `.factory/verification-6.md`.
+## Remaining work
 
-## Defects and notes
+The review records four blocking findings, including incomplete first-screen scope, demo state retained across SPA exits, no test of automatic timestamp activation, and an unexplained ZIP-only install path. Major findings cover all-sites permission disclosure, route metadata, history focus, the 404 skeleton, unlisted claims, and manifest import/edit capability. Minor findings cover the exact copy rewrites required for a zero-finding pass.
 
-No release-blocking defects found. `npm ci` reports 11 development-tooling advisories; `npm audit --omit=dev --audit-level=high` is clean. No product code was changed during independent verification.
+Run the next review from scratch after repairs; do not treat the green test suite as resolution of the documented coverage gaps.
