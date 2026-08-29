@@ -81,4 +81,4 @@ Audited 2026-08-29 after adversarial review 3. Counts treat contractions, hyphen
 | Existing author feature set | Creator Kit |
 | Purchased access token | license |
 
-Catalog description: “Prove a code change before an author-prepared programming video continues.” (10 words, 73 characters)
+Catalog description: “Prove a code change before an author-prepared programming video continues.” (10 words, 74 characters)

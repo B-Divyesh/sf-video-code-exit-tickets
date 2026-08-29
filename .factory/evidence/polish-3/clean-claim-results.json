@@ -1,0 +1,140 @@
+[
+  {
+    "id": "demo-pass",
+    "command": "npm test -- --grep @claim:demo-pass",
+    "status": 0,
+    "duration_ms": 10327
+  },
+  {
+    "id": "privacy-demo",
+    "command": "npm test -- --grep @claim:privacy-demo",
+    "status": 0,
+    "duration_ms": 9740
+  },
+  {
+    "id": "demo-exit-isolation",
+    "command": "npm test -- --grep @claim:demo-exit-isolation",
+    "status": 0,
+    "duration_ms": 20354
+  },
+  {
+    "id": "timeout-recovery",
+    "command": "npm test -- --grep @claim:timeout-recovery",
+    "status": 0,
+    "duration_ms": 11197
+  },
+  {
+    "id": "extension-download",
+    "command": "npm test -- --grep @claim:extension-download",
+    "status": 0,
+    "duration_ms": 8753
+  },
+  {
+    "id": "manifest-export",
+    "command": "npm test -- --grep @claim:manifest-export",
+    "status": 0,
+    "duration_ms": 11283
+  },
+  {
+    "id": "creator-sales-paused",
+    "command": "npm test -- --grep @claim:creator-sales-paused",
+    "status": 0,
+    "duration_ms": 8714
+  },
+  {
+    "id": "sandbox-isolation",
+    "command": "npm test -- --grep @claim:sandbox-isolation",
+    "status": 0,
+    "duration_ms": 9726
+  },
+  {
+    "id": "extension-flow",
+    "command": "npm test -- --grep @claim:extension-flow",
+    "status": 0,
+    "duration_ms": 13969
+  },
+  {
+    "id": "source-not-saved",
+    "command": "npm test -- --grep @claim:source-not-saved",
+    "status": 0,
+    "duration_ms": 14021
+  },
+  {
+    "id": "template-allowlist",
+    "command": "npm run test:unit -- --testNamePattern @claim:template-allowlist",
+    "status": 0,
+    "duration_ms": 1288
+  },
+  {
+    "id": "checkpoint-sorting",
+    "command": "npm run test:unit -- --testNamePattern @claim:checkpoint-sorting",
+    "status": 0,
+    "duration_ms": 1317
+  },
+  {
+    "id": "video-pause-gate",
+    "command": "npm test -- --grep @claim:video-pause-gate",
+    "status": 0,
+    "duration_ms": 13939
+  },
+  {
+    "id": "video-local-only",
+    "command": "npm test -- --grep @claim:video-local-only",
+    "status": 0,
+    "duration_ms": 13756
+  },
+  {
+    "id": "sandbox-no-extension-apis",
+    "command": "npm test -- --grep @claim:sandbox-no-extension-apis",
+    "status": 0,
+    "duration_ms": 13739
+  },
+  {
+    "id": "license-check-cadence",
+    "command": "npm test -- --grep @claim:license-check-cadence",
+    "status": 0,
+    "duration_ms": 9186
+  },
+  {
+    "id": "site-local-assets",
+    "command": "npm test -- --grep @claim:site-local-assets",
+    "status": 0,
+    "duration_ms": 8895
+  },
+  {
+    "id": "no-manifest-inert",
+    "command": "npm test -- --grep @claim:no-manifest-inert",
+    "status": 0,
+    "duration_ms": 13939
+  },
+  {
+    "id": "sample-manifest-download",
+    "command": "npm test -- --grep @claim:sample-manifest-download",
+    "status": 0,
+    "duration_ms": 8797
+  },
+  {
+    "id": "unique-checkpoint-ids",
+    "command": "npm run test:unit -- --testNamePattern @claim:unique-checkpoint-ids",
+    "status": 0,
+    "duration_ms": 1286
+  },
+  {
+    "id": "offline-reload",
+    "command": "npm test -- --grep @claim:offline-reload",
+    "status": 0,
+    "duration_ms": 8780
+  },
+  {
+    "id": "manifest-round-trip",
+    "command": "npm test -- --grep @claim:manifest-round-trip",
+    "status": 0,
+    "duration_ms": 11136
+  },
+  {
+    "id": "manifest-import-recovery",
+    "command": "npm test -- --grep @claim:manifest-import-recovery",
+    "status": 0,
+    "duration_ms": 10870
+  }
+]

@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.sociobot.in; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://api.sociobot.in; frame-ancestors 'none'
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+Accept-Ranges: bytes
+Content-Type: text/html; charset=utf-8
+Date: Sat, 29 Aug 2026 03:02:19 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

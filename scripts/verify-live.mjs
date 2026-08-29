@@ -14,6 +14,8 @@ const expected = {
 };
 
 await mkdir(evidence, { recursive: true });
+await mkdir(`${evidence}/live-home`, { recursive: true });
+await mkdir(`${evidence}/live-demo`, { recursive: true });
 const report = {
   origin: base,
   checkedAt: new Date().toISOString(),
@@ -113,12 +115,12 @@ try {
     horizontalOverflow: await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
     positions
   };
-  await page.screenshot({ path: `${evidence}/live-home-mobile.png`, fullPage: true });
+  await page.screenshot({ path: `${evidence}/live-home/screenshot-mobile.png`, fullPage: true });
 
   await page.getByRole('link', { name: 'Try the sample checkpoint' }).first().click();
   if (new URL(page.url()).searchParams.get('demo') !== '1') throw new Error('The one-click demo URL did not use ?demo=1');
   await page.getByText('Demo — sample data, nothing is saved', { exact: true }).waitFor();
-  await page.screenshot({ path: `${evidence}/live-demo-mobile.png`, fullPage: true });
+  await page.screenshot({ path: `${evidence}/live-demo/screenshot-mobile.png`, fullPage: true });
   const editor = page.getByLabel('JavaScript');
   const starter = await editor.inputValue();
   await editor.fill(starter.replace('* 1', '* 2'));

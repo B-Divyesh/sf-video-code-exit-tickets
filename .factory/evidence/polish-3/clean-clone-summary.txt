@@ -1,0 +1,12 @@
+Commit: d61ac9053602da797e9933c4345833053af90603
+Fresh clone: /tmp/rbn-polish3-final-UzexrY
+npm ci: PASS (0 vulnerabilities)
+Every exact .factory/claims.json command: PASS (23/23)
+npm run check: PASS
+npm run test:unit: PASS (3/3)
+npm test: PASS (23/23)
+npm run build: PASS
+npm audit --audit-level=high: PASS (0 vulnerabilities)
+Initial site JavaScript: 28.76 kB raw / 9.70 kB gzip
+Site CSS: 17.94 kB raw / 4.81 kB gzip
+Packaged Chrome extension: 9.85 kB

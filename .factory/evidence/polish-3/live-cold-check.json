@@ -1,0 +1,134 @@
+{
+  "origin": "https://video-code-exit-tickets.sociobot.in",
+  "checkedAt": "2026-08-29T03:22:43.343Z",
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Run Before Next — Code checks for video lessons",
+      "metadata": true
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Run Before Next",
+      "metadata": true
+    },
+    "/creator": {
+      "status": 200,
+      "title": "Checkpoint file builder — Run Before Next",
+      "metadata": true
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Run Before Next",
+      "metadata": true
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Run Before Next",
+      "metadata": true
+    },
+    "/missing-page": {
+      "status": 404,
+      "title": "Page not found — Run Before Next",
+      "metadata": true,
+      "noindex": true
+    }
+  },
+  "accessibility": {
+    "routesChecked": [
+      "/",
+      "/demo",
+      "/creator",
+      "/privacy",
+      "/terms",
+      "/missing-page"
+    ],
+    "seriousOrCriticalAxeViolations": 0,
+    "oneH1AndMainPerRoute": true
+  },
+  "mobile": {
+    "viewport": "390x844",
+    "firstScreenComplete": true,
+    "horizontalOverflow": false,
+    "positions": {
+      "Prove your code before the video continues": {
+        "x": 20,
+        "y": 121.796875,
+        "width": 350,
+        "height": 169.25
+      },
+      "For learners using programming lessons whose author added Run Before Next code checks.": {
+        "x": 20,
+        "y": 309.046875,
+        "width": 350,
+        "height": 71.390625
+      },
+      "Try the sample checkpoint": {
+        "x": 20,
+        "y": 400.4375,
+        "width": 283.6875,
+        "height": 48
+      },
+      "Works on lessons with an author-provided checkpoint file.": {
+        "x": 20,
+        "y": 496.125,
+        "width": 350,
+        "height": 43.375
+      },
+      "The sample reloads offline after one online visit.": {
+        "x": 20,
+        "y": 543.5,
+        "width": 350,
+        "height": 43.375
+      },
+      "Learner code is not saved.": {
+        "x": 20,
+        "y": 590.875,
+        "width": 350,
+        "height": 21.6875
+      },
+      "The Chrome extension is free.": {
+        "x": 20,
+        "y": 616.5625,
+        "width": 350,
+        "height": 21.6875
+      }
+    }
+  },
+  "demo": {
+    "sampleOutput": "6, 10, 14",
+    "resetFresh": true,
+    "wordmarkExitFresh": true,
+    "bannerPersistent": true,
+    "actions": {
+      "reset": true,
+      "startForReal": true
+    },
+    "storage": {
+      "local": [],
+      "session": [],
+      "indexed": []
+    },
+    "offlineReload": true,
+    "sameOriginRequestsOnly": true
+  },
+  "focus": {
+    "newRouteFocusesHeading": true,
+    "historyRestoresVisibleInvoker": true
+  },
+  "headers": {
+    "cspFrameAncestorsNone": true,
+    "cspObjectSrcNone": true,
+    "nosniff": true,
+    "referrerPolicy": "strict-origin-when-cross-origin"
+  },
+  "consoleErrors": [],
+  "links": {
+    "/": 200,
+    "/demo": 200,
+    "/privacy": 200,
+    "/downloads/run-before-next-chrome.zip": 200,
+    "/sample-manifest.json": 200,
+    "/terms": 200
+  }
+}
